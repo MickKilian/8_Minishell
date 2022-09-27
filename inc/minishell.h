@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/15 11:58:14 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/26 01:42:21 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,74 +20,71 @@
 # include <stdio.h>
 # include <string.h>
 # include <readline/readline.h>
+# include <fcntl.h>
+# include "get_next_line.h"
 
 # define ERR_MALLOC "Error! Malloc"
+# define ERR_NULLELEM "Error! List elem is NULL"
 # define ERR_SYNTAX "Error! Syntax"
+# define ERR_STRNULL "Error! String is NULL"
+# define ERR_TESTFILE "Error! Reading file lexer.test"
 
-typedef struct s_lex		t_lex;
-typedef struct s_token		t_token;
-typedef enum e_char_ascii	t_char_ascii;
-typedef enum e_char_types	t_char_types;
-typedef enum e_read_modes	t_read_modes;
-typedef enum e_rec_modes	t_rec_modes;
-typedef enum e_lex_actions	t_lex_actions;
-typedef enum e_type			t_type;
-typedef void				(t_func)();
+typedef struct s_lex			t_lex;
+typedef struct s_token			t_token;
+typedef struct s_lex_proc		t_lex_proc;
+typedef enum e_char_ascii		t_char_ascii;
+typedef enum e_char_types		t_char_types;
+typedef enum e_read_modes		t_read_modes;
+typedef enum e_lex_actions		t_lex_actions;
+typedef enum e_token_types		t_token_types;
+typedef int						(*t_func)(t_lex *);
 
-struct s_lex
+enum e_token_types
 {
-	char	**lexer;
-	char	*temp;
-	char	*user_input;
-	int		decision[10][10];
-	int		group;
-	int		rank;
-	t_func	*ft[10];
-	int		read_mode;
-	int		rec_mode;
-};
-
-struct s_token
-{
-	char	*id;
-	t_type	*type;
-	t_token	*prev;
-	t_token	*next;
-};
-
-struct s_lex_modes
-{
-	t_lex_actions	lex_action;
-	t_rec_modes		rec_mode;
-	t_read_modes	read_mode;
-};
-
-enum e_type
-{
+	NEW,
 	WORD,
-	ASSIGNMENT_WORD,
-	NAME,
-	NEWLINE,
-	IO_NUMBER
+	//ASSIGNMENT_WORD,
+	//NAME,
+	NEW_LINE,
+	SPL,
+	DBL,
+	LSS,
+	GRT,
+	GGRT,
+	HEREDOC,
+	PIPE,
+	AMP,
+	OP_OR,
+	OP_AND,
+	END_OF_INPUT,
+	LEN_TOKEN_TYPES
 };
 
 enum e_char_types
 {
 	SEP_CHAR,
 	STD_CHAR,
-	PIPE_CHAR,
 	SPL_CHAR,
 	DBL_CHAR,
+	ESCP_CHAR,
+	PIPE_CHAR,
+	AMP_CHAR,
 	LT_CHAR,
  	GT_CHAR,
-	AMP_CHAR
+	END_CHAR,
+	LEN_CHAR_TYPES
 };
 
 enum e_lex_actions
 {
-	NEXT,
+	CATCH,
+	KEEP,
+	DROP,
+	TAKE,
 	SKIP,
-	SYNT_ERR
+	END,
+	SYNT_ERR,
+	LEN_LEX_ACTIONS
 };
 
 enum e_read_modes
@@ -96,20 +93,22 @@ enum e_read_modes
 	STD_MODE,
 	SPL_MODE,
 	DBL_MODE,
-	SPC_MODE,
-	SYNT_ERR_MODE
-};
-
-enum e_rec_modes
-{
-	NEW_REC,
-	CONT_REC,
-	CATCH_REC,
-	DROP_REC
+	ESCP_MODE,
+	PIPE_MODE,
+	AMP_MODE,
+	LT_MODE,
+	GT_MODE,
+	OR_MODE,
+	AND_MODE,
+	HEREDOC_MODE,
+	GGRT_MODE,
+	SYNT_ERR_MODE,
+	LEN_READ_MODES
 };
 
 enum e_char_ascii
 {
+	NUL = 0,
 	HTAB = 9,
 	NL = 10,
 	VTAB = 11,
@@ -175,7 +174,7 @@ enum e_char_ascii
 	CAPITAL_Y = 89,
 	CAPITAL_Z = 90,
 	LSBQ = 91,
-	BSOL = 92,
+	ESCP = 92,
 	RSQB = 93,
 	CIRC = 94,
 	LOWBAR = 95,
@@ -210,58 +209,114 @@ enum e_char_ascii
 	VERBAR = 124,
 	RCUB = 125,
 	TILDE = 126,
-	DELETE = 127
+	DELETE = 127,
+};
+
+struct s_lex_proc
+{
+	t_lex_actions	buffer_action;
+	t_lex_actions	char_action;
+	t_read_modes	read_mode;
+	t_token_types	token_type;
+};
+
+struct s_lex
+{
+	char		*temp;
+	int			nb_taken_char;
+	char		*user_input;
+	t_lex_proc	prev_decision;
+	t_lex_proc	new_decision;
+	t_lex_proc	decision[LEN_READ_MODES][LEN_CHAR_TYPES];
+	char		*token_types[LEN_TOKEN_TYPES];
+	t_func		ft[LEN_LEX_ACTIONS];
+	int			nb_of_tokens;
+	t_token		*token;
+};
+
+struct s_token
+{
+	char			*id;
+	t_token_types	type;
+	t_token			*prev;
+	t_token			*next;
 };
 
 /* ************************************************************************** */
-/*                                  lexer_main.c                                    */
+/*                                  lexer_main.c                              */
 /* ************************************************************************** */
-int		main(void);
-char	*ft_read_prompt(void);
-int		ft_lexer(t_lex *lex);
+int				main(void);
+int				ft_read_prompt(void);
+int				ft_lexer(t_lex *lex);
+int				ft_print_lexer_content(t_lex *lex);
 
 /* ************************************************************************** */
-/*                            lexer_memory.c                               */
+/*                               initializations.c                            */
 /* ************************************************************************** */
-void	ft_bzero(void *s, size_t n);
-int		ft_mallocator(void *ptr, size_t size);
+const char		*ft_getlabel_token_types(const t_token_types index);
+int				ft_init_decisions(t_lex *lex);
+/* ************************************************************************** */
+/*                            lexer_memory.c                                  */
+/* ************************************************************************** */
+void			ft_bzero(void *s, size_t n);
+int				ft_mallocator(void *ptr, size_t size);
+int				ft_freeall(t_lex *lex);
 
 /* ************************************************************************** */
-/*                                lexer_error.c                                  */
+/*                             lexer_error.c                                  */
 /* ************************************************************************** */
-int	ft_msgerr(char	*str);
+int				ft_msgerr(char	*str);
 
 /* ************************************************************************** */
-/*                              lexer_decisions.c                                */
+/*                               list.c                                      */
 /* ************************************************************************** */
-int		ft_init_decision_1(t_lex *lex);
-int		ft_init_decision_2(t_lex *lex);
-int		ft_init_decision_3(t_lex *lex);
-int		ft_init_decision_4(t_lex *lex);
-int		ft_init_decision_5(t_lex *lex);
+t_token			*ft_new_token(char *str);
+t_token			*ft_token_addnext(t_token *current, t_token *new);
+t_token			*ft_token_jumpcurrent(t_token *prev, t_token *next);
+int				ft_free_tokenlist(t_lex *lex);
 
 /* ************************************************************************** */
-/*                              lexer_actions.c                                */
+/*                         lexer_init_decisions.c                             */
 /* ************************************************************************** */
-int		ft_init_lex_actions(t_lex *lex);
-int		ft_lex_ignore(t_lex *lex);
-int		t_lex_take(t_lex *lex);
-int		t_lex_catch(t_lex *lex);
-int		t_lex_synt_err(t_lex *lex);
-int		ft_lex_qt(t_lex *lex);
-int		ft_lex_spc(t_lex *lex);
-int		ft_lex_next(t_lex *lex);
+int				ft_init_decision_1(t_lex *lex);
+int				ft_init_decision_2(t_lex *lex);
+int				ft_init_decision_3(t_lex *lex);
+int				ft_init_decision_4(t_lex *lex);
+int				ft_init_decision_5(t_lex *lex);
+int				ft_init_decision_6(t_lex *lex);
+int				ft_init_decision_7(t_lex *lex);
 
 /* ************************************************************************** */
-/*                             lexer_utils.c                               */
+/*                         lexer_apply_decision.c                            */
 /* ************************************************************************** */
-size_t	ft_strlen(const char *s);
-char	*ft_strndup(const char *s, size_t n);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
+int				ft_apply_decision(t_lex *lex);
+int				ft_print_lex_proc(t_lex_proc proc);
 
 /* ************************************************************************** */
-/*                                lexer_ascii.c                                  */
+/*                            lexer_actions.c                                 */
 /* ************************************************************************** */
-int		ft_ascii_type(int c);
+int				ft_init_lex_actions(t_lex *lex);
+int				ft_lex_catch(t_lex *lex);
+int				ft_lex_keep(t_lex *lex);
+int				ft_lex_drop(t_lex *lex);
+int				ft_lex_take(t_lex *lex);
+int				ft_lex_skip(t_lex *lex);
+int				ft_lex_record(t_lex *lex);
+int				ft_lex_end(t_lex *lex);
+int				ft_lex_synt_err(t_lex *lex);
+
+/* ************************************************************************** */
+/*                              lexer_utils.c                                 */
+/* ************************************************************************** */
+size_t			ft_strlen(const char *s);
+char			*ft_strndup(const char *s, size_t n);
+int				ft_strncmp(const char *s1, const char *s2, size_t n);
+char			*ft_strjoin(char const *s1, char const *s2);
+char			*ft_substr(char const *s, unsigned int start, size_t len);
+
+/* ************************************************************************** */
+/*                              lexer_ascii.c                                 */
+/* ************************************************************************** */
+int				ft_char_type(char c);
 
 #endif

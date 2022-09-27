@@ -6,31 +6,32 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/14 18:29:30 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/26 00:50:53 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_ascii_type(char c)
+int	ft_char_type(char c)
 {
-	int	type;
-
-	if (c == SP || (c >= HTAB && c <= CRET))
-		type = SEP_CHAR;
+	if (c != NL && (c == SP || (c >= HTAB && c <= CRET)))
+		 return(SEP_CHAR);
+	if (c == ESCP)
+		 return(ESCP_CHAR);
 	if (c == QUOT)
-		type = DBL_CHAR;
+		 return(DBL_CHAR);
 	if (c == APOS)
-		type = SPL_CHAR;
+		 return(SPL_CHAR);
 	if (c == VERBAR)
-		type = PIPE_CHAR;
+		 return(PIPE_CHAR);
 	if (c == COMAND)
-		type = AMP_CHAR;
+		 return(AMP_CHAR);
 	if (c == LT)
-		type = LT_CHAR;
+		 return(LT_CHAR);
 	if (c == GT)
-		type = GT_CHAR;
+		 return(GT_CHAR);
+	if (c == NUL || c == NL)
+		 return(END_CHAR);
 	else
-		type = STD_CHAR;
-	return (type);
+		 return(STD_CHAR);
 }
