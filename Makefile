@@ -6,7 +6,7 @@
 #    By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 18:34:29 by mbourgeo          #+#    #+#              #
-#    Updated: 2022/09/28 10:59:27 by mbourgeo         ###   ########.fr        #
+#    Updated: 2022/09/28 13:13:58 by mbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@
 MD_SRCS	=	lexparser_main.c lexer_utils.c lexer_ascii.c lexer_memory.c lexer_list.c \
 				lexer_actions.c lexer_error.c lexer_init_decisions.c lexparser_initializations.c \
 				lexer_apply_decision.c \
-				parser_init_decisions.c parser_actions.c
+				parser_init_decisions.c parser_actions.c parser_list.c parser_apply_decision.c
 #				parser_main.c parser_utils.c parser_ascii.c parser_memory.c parser_list.c \
 #				parser_actions.c parser_error.c parser_init_decisions.c parser_initializations.c \
 #				parser_apply_decision.c

@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:22:22 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/28 11:48:58 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/28 15:42:32 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ t_token	*ft_new_token(char *str)
 
 t_token	*ft_token_addnext(t_token *current, t_token *next)
 {
+	printf("iciici\n");
 	if (!current)
 		return (current = next, current);
 	else if (!next)

@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/28 11:59:38 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/28 15:53:49 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,7 @@ struct s_lex_proc
 
 struct s_pars_proc
 {
-	t_pars_actions		pars_buffer_action;
+	t_pars_actions		pars_list_action;
 	t_pars_actions		token_action;
 	t_pars_read_modes	pars_read_mode;
 };
@@ -280,15 +280,19 @@ struct s_pars
 	char		*temp;
 	int			nb_taken_char;
 	char		*user_input;
+	//int			nb_of_tokens;
 	//
 	t_pars_proc	prev_decision;
 	t_pars_proc	new_decision;
 	t_pars_proc	decision[LEN_PARS_RD_MDS][LEN_TOKEN_TYPES];
 	char		*token_types[LEN_TOKEN_TYPES];
 	t_pars_func	ft[LEN_PARS_ACTIONS];
-	int			nb_of_tokens;
+	t_command	*command;
 	int			nb_of_commands;
 	t_token		*token;
+	t_token		*token_test;
+	int			fd_in;
+	int			fd_out;
 };
 
 struct s_token
@@ -302,6 +306,7 @@ struct s_token
 struct s_command
 {
 	int				id;
+	int				nb_of_tokens;
 	t_token			*token;
 	t_command		*prev;
 	t_command		*next;
@@ -337,15 +342,23 @@ int				ft_freeall(t_lex *lex);
 int				ft_msgerr(char	*str);
 
 /* ************************************************************************** */
-/*                               list.c                                      */
+/*                            lexer_list.c                                    */
 /* ************************************************************************** */
 t_token			*ft_new_token(char *str);
-t_token			*ft_token_addnext(t_token *current, t_token *new);
+t_token			*ft_token_addnext(t_token *current, t_token *next);
 t_token			*ft_token_jumpcurrent(t_token *prev, t_token *next);
 int				ft_free_tokenlist(t_lex *lex);
 
 /* ************************************************************************** */
-/*                         lexer_init_lex_decisions.c                             */
+/*                           parser_list.c                                    */
+/* ************************************************************************** */
+t_command			*ft_new_command(t_token *token);
+t_command			*ft_command_addnext(t_command *current, t_command *next);
+//t_token			*ft_token_jumpcurrent(t_token *prev, t_token *next);
+//int				ft_free_tokenlist(t_lex *lex);
+
+/* ************************************************************************** */
+/*                         lexer_init_decisions.c                             */
 /* ************************************************************************** */
 int				ft_init_lex_decision_1(t_lex *lex);
 int				ft_init_lex_decision_2(t_lex *lex);
@@ -356,7 +369,7 @@ int				ft_init_lex_decision_6(t_lex *lex);
 int				ft_init_lex_decision_7(t_lex *lex);
 
 /* ************************************************************************** */
-/*                         parser_init_decisions.c                             */
+/*                        parser_init_decisions.c                             */
 /* ************************************************************************** */
 int				ft_init_pars_decision_1(t_pars *pars);
 int				ft_init_pars_decision_2(t_pars *pars);
@@ -371,6 +384,12 @@ int				ft_init_pars_decision_7(t_pars *pars);
 /* ************************************************************************** */
 int				ft_lex_apply_decision(t_lex *lex);
 int				ft_print_lex_proc(t_lex_proc proc);
+
+/* ************************************************************************** */
+/*                         parser_apply_decision.c                            */
+/* ************************************************************************** */
+int				ft_pars_apply_decision(t_pars *pars);
+int				ft_print_pars_proc(t_pars_proc proc);
 
 /* ************************************************************************** */
 /*                            lexer_actions.c                                 */

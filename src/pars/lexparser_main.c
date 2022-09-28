@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/28 11:16:31 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/28 14:58:13 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,12 @@ int	ft_read_prompt(void)
 		//	return (ft_msgerr(ERR_MALLOC), 1);
 		//lex.user_input = temp;
 		ft_lexer(&lex);
-		ft_parser(&lex, &pars);
 		//printf("came back\n");
 		//printf("check reading mode : %d\n", lex.new_decision.lex_read_mode);
 		if (lex.new_decision.lex_read_mode != SYNT_ERR_LEX_RD_MD)
-		{
 			ft_print_lexer_content(&lex);
-			ft_print_parser_content(&pars);
-		}
+		ft_parser(&lex, &pars);
+		ft_print_parser_content(&pars);
 		ft_freeall(&lex);
 		free(temp);
 		temp = NULL;
@@ -104,14 +102,11 @@ int	ft_lexer(t_lex *lex)
 
 int	ft_parser(t_lex *lex, t_pars *pars)
 {
-	int	i;
-
-	(void)pars;
-	i = 0;
-	pars->nb_of_tokens = lex->nb_of_tokens;
-	while (i++ < lex->nb_of_tokens)
+	pars->token = lex->token;
+	printf("current token : %s\n", pars->token->id);
+	while (pars->token->type != TOK_END_OF_INPUT)
 	{
-		pars->token = lex->token;
+		ft_pars_apply_decision(pars);
 		lex->token = lex->token->next;
 		pars->token = pars->token->next;
 	}
@@ -156,16 +151,23 @@ int	ft_print_lexer_content(t_lex *lex)
 int	ft_print_parser_content(t_pars *pars)
 {
 	int	i;
+	int	j;
 
 	i = 0;
+	j = 0;
 	printf("\nPARSER CONTENT\n");
-	while (i++ < pars->nb_of_tokens)
+	while (i++ < pars->nb_of_commands)
 	{
-		//printf("here\n");
-		//printf("lex->token->id : %s\n", lex->token->id);
-		//printf("%s :%d: <%s>\n", lex->token->id, lex->token->id[0], ft_getlabel_token_types(lex->token->type));
-		printf("%s <%s>\n", pars->token->id, ft_getlabel_token_types(pars->token->type));
-		pars->token = pars->token->next;
+		printf("------> starting command id<%d> verif_id<%d>\n", i, pars->command->id);
+		while (j++ < pars->command->nb_of_tokens)
+		{
+			//printf("here\n");
+			//printf("lex->token->id : %s\n", lex->token->id);
+			//printf("%s :%d: <%s>\n", lex->token->id, lex->token->id[0], ft_getlabel_token_types(lex->token->type));
+			printf("%s <%s>\n", pars->command->token->id, ft_getlabel_token_types(pars->command->token->type));
+			pars->command->token = pars->command->token->next;
+		}
+		pars->command = pars->command->next;
 	}
 	return (0);
 }

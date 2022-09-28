@@ -1,4 +1,4 @@
-/* ***********ll*************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parser_list.c                                      :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:22:22 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/28 11:47:35 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/28 15:42:15 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_command	*ft_new_command(t_token *token)
 	return (new);
 }
 
-t_token	*ft_command_addnext(t_command *current, t_command *next)
+t_command	*ft_command_addnext(t_command *current, t_command *next)
 {
 	if (!current)
 		return (current = next, current);
@@ -48,7 +48,7 @@ t_token	*ft_command_addnext(t_command *current, t_command *next)
 	return (next);
 }
 
-t_token	*ft_token_jumpcurrent(t_token *prev, t_token *next)
+/*t_token	*ft_token_jumpcurrent(t_token *prev, t_token *next)
 {
 	if (next->next != next)
 	{
@@ -82,4 +82,4 @@ int	ft_free_tokenlist(t_lex *lex)
 	temp = NULL;
 	lex->token = NULL;
 	return (0);
-}
+}*/

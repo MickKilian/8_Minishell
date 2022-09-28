@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/28 11:55:07 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/28 15:54:27 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,15 @@ int	ft_init_pars_actions(t_pars *pars)
 
 int	ft_pars_new(t_pars *pars)
 {
-	(void)pars;
+	pars->command = ft_command_addnext(pars->command, ft_new_command(pars->token));
+	pars->command->nb_of_tokens = 0;
 	return (0);
 }
 
 int	ft_pars_catch(t_pars *pars)
 {
-	//printf("in ft_catch\n");
+	(void)pars;
+/*	//printf("in ft_catch\n");
 	//if (pars->token)
 	//	printf("\n\n*****current token is : %s\n", pars->token->id);
 	ft_pars_record(pars);
@@ -61,6 +63,7 @@ int	ft_pars_catch(t_pars *pars)
 		free(pars->temp);
 		pars->temp = NULL;
 	}
+	*/
 	return (0);
 }
 
@@ -85,8 +88,25 @@ int	ft_pars_drop(t_pars *pars)
 
 int	ft_pars_take(t_pars *pars)
 {
+	t_token	*temp1;
+	//t_token	*temp2;
+
+	temp1 = ft_new_token(pars->token->id);
+	//temp2 = NULL;
+	printf("temp1 : %s\n", temp1->id);
+	//temp2 = pars->command->token;
+	//printf("temp2 : %p\n", pars->command->token);
 	//printf("in ft_take\n");
-	pars->nb_taken_char++;
+	printf("testtest\n");
+	//ft_bzero(pars->command, sizeof(t_command));
+	//ft_bzero(pars->command->token, sizeof(t_token));
+	printf("testitest\n");
+	ft_bzero(&(*pars->command->token), sizeof(t_token));
+	printf("testotest\n");
+	printf("command : %p\n", pars->command);
+	ft_token_addnext(pars->command->token, temp1);
+	//pars->command->token = ft_token_addnext(pars->command->token, ft_new_token(pars->token->id));
+	pars->command->nb_of_tokens++;
 	return (0);
 }
 
@@ -100,7 +120,8 @@ int	ft_pars_skip(t_pars *pars)
 
 int	ft_pars_record(t_pars *pars)
 {
-	char	*temp1;
+	(void)pars;
+	/*char	*temp1;
 	char	*temp2;
 
 	//printf("in ft_record\n");
@@ -126,15 +147,18 @@ int	ft_pars_record(t_pars *pars)
 		free(temp2);
 		pars->nb_taken_char = 0;
 	}
+	*/
 	return (0);
 }
 
 int	ft_pars_end(t_pars *pars)
 {
-	//printf("in ft_end\n");
+	(void)pars;
+/*	//printf("in ft_end\n");
 	ft_pars_take(pars);
 	pars->prev_decision.token_type = pars->new_decision.token_type;
 	ft_pars_catch(pars);
+	*/
 	return (0);
 }
 

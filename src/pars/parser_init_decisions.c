@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/28 11:33:33 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/28 12:41:03 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,16 @@
 
 int	ft_init_pars_decision_1(t_pars *pars)
 {
-	pars->decision[NEW_PARS_RD_MD][TOK_NEW] = (t_pars_proc){PARS_KEEP, PARS_SKIP, NEW_PARS_RD_MD};
+	//pars->decision[NEW_PARS_RD_MD][TOK_NEW] = (t_pars_proc){PARS_KEEP, PARS_SKIP, NEW_PARS_RD_MD};
 	pars->decision[NEW_PARS_RD_MD][TOK_WORD] = (t_pars_proc){PARS_KEEP, PARS_TAKE, STD_PARS_RD_MD};
 	pars->decision[NEW_PARS_RD_MD][TOK_PIPE] = (t_pars_proc){PARS_CATCH, PARS_SKIP, NEW_PARS_RD_MD};
 	pars->decision[NEW_PARS_RD_MD][TOK_AMP] = (t_pars_proc){PARS_KEEP, PARS_TAKE, AMP_PARS_RD_MD};
 	pars->decision[NEW_PARS_RD_MD][TOK_LSS] = (t_pars_proc){PARS_KEEP, PARS_TAKE, LT_PARS_RD_MD};
 	pars->decision[NEW_PARS_RD_MD][TOK_GRT] = (t_pars_proc){PARS_KEEP, PARS_TAKE, GT_PARS_RD_MD};
 	pars->decision[NEW_PARS_RD_MD][TOK_END_OF_INPUT] = (t_pars_proc){PARS_END, PARS_SKIP, NEW_PARS_RD_MD};
-	pars->decision[STD_PARS_RD_MD][TOK_NEW] = (t_pars_proc){PARS_KEEP, PARS_SKIP, NEW_PARS_RD_MD};
+	//pars->decision[STD_PARS_RD_MD][TOK_NEW] = (t_pars_proc){PARS_KEEP, PARS_SKIP, NEW_PARS_RD_MD};
 	pars->decision[STD_PARS_RD_MD][TOK_WORD] = (t_pars_proc){PARS_KEEP, PARS_TAKE, STD_PARS_RD_MD};
-	pars->decision[STD_PARS_RD_MD][TOK_PIPE] = (t_pars_proc){PARS_CATCH, PARS_SKIP, NEW_PARS_RD_MD};
+	pars->decision[STD_PARS_RD_MD][TOK_PIPE] = (t_pars_proc){PARS_NEW, PARS_SKIP, NEW_PARS_RD_MD};
 	pars->decision[STD_PARS_RD_MD][TOK_AMP] = (t_pars_proc){PARS_KEEP, PARS_TAKE, AMP_PARS_RD_MD};
 	pars->decision[STD_PARS_RD_MD][TOK_LSS] = (t_pars_proc){PARS_KEEP, PARS_TAKE, LT_PARS_RD_MD};
 	pars->decision[STD_PARS_RD_MD][TOK_GRT] = (t_pars_proc){PARS_KEEP, PARS_TAKE, GT_PARS_RD_MD};
