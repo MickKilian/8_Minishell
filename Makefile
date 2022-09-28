@@ -6,19 +6,23 @@
 #    By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 18:34:29 by mbourgeo          #+#    #+#              #
-#    Updated: 2022/09/21 22:33:30 by mbourgeo         ###   ########.fr        #
+#    Updated: 2022/09/28 10:59:27 by mbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_GOAL	=	all
 
-LEX_SRCS	=	lexer_main.c lexer_utils.c lexer_ascii.c lexer_memory.c lexer_list.c \
-				lexer_actions.c lexer_error.c lexer_init_decisions.c lexer_initializations.c \
-				lexer_apply_decision.c
-LEX_SRCDIR	=	src/lex
-LEX_PATH	=	$(addprefix $(LEX_SRCDIR)/, $(LEX_SRCS))
-LEX_OBJDIR	=	obj
-LEX_OBJS	=	$(patsubst $(LEX_SRCDIR)/%, $(LEX_OBJDIR)/%, $(LEX_PATH:.c=.o))
+MD_SRCS	=	lexparser_main.c lexer_utils.c lexer_ascii.c lexer_memory.c lexer_list.c \
+				lexer_actions.c lexer_error.c lexer_init_decisions.c lexparser_initializations.c \
+				lexer_apply_decision.c \
+				parser_init_decisions.c parser_actions.c
+#				parser_main.c parser_utils.c parser_ascii.c parser_memory.c parser_list.c \
+#				parser_actions.c parser_error.c parser_init_decisions.c parser_initializations.c \
+#				parser_apply_decision.c
+MD_SRCDIR	=	src/pars
+MD_PATH	=	$(addprefix $(MD_SRCDIR)/, $(MD_SRCS))
+MD_OBJDIR	=	obj
+MD_OBJS		=	$(patsubst $(MD_SRCDIR)/%, $(MD_OBJDIR)/%, $(MD_PATH:.c=.o))
 
 BONUS_SRCS	=	bonus_main.c
 BONUS_SRCDIR	=	minishell_bonus/src
@@ -27,7 +31,7 @@ BONUS_OBJDIR	=	minishell_bonus/obj
 BONUS_OBJS	=	$(patsubst $(BONUS_SRCDIR)/%, $(BONUS_OBJDIR)/%, $(BONUS_PATH:.c=.o))
 
 MD_DEP_DIR	=	dep
-LEX_DEP	=	$(patsubst $(LEX_OBJDIR)/%.o, $(MD_DEP_DIR)/%.d, $(LEX_OBJS))
+MD_DEP		=	$(patsubst $(MD_OBJDIR)/%.o, $(MD_DEP_DIR)/%.d, $(MD_OBJS))
 BN_DEP_DIR	=	minishell_bonus/dep
 BONUS_DEP	=	$(patsubst $(BONUS_OBJDIR)/%.o, $(BN_DEP_DIR)/%.d, $(BONUS_OBJS))
 
@@ -58,7 +62,7 @@ DFLAGS		=	-MMD -MF
 
 all:		$(NAME)
 
-$(NAME):	$(LEX_OBJS) | $(LIB1_NAME) Makefile
+$(NAME):	$(MD_OBJS) | $(LIB1_NAME) Makefile
 				$(CC) $(CFLAGS) $(DEBUG) $^ -I$(MD_HD_DIR) -I$(HDLIB1_DIR) -L$(LIB1_DIR) -lgnl -o $@
 
 bonus:		$(BONUS_OBJS) | $(LIB1_NAME) Makefile 
@@ -67,11 +71,11 @@ bonus:		$(BONUS_OBJS) | $(LIB1_NAME) Makefile
 $(LIB1_NAME):
 				$(MAKE) -C $(LIB1_DIR) all
 
--include $(LEX_DEP)
-$(LEX_OBJDIR)/%.o:		$(LEX_SRCDIR)/%.c | $(LIB1_NAME) $(LEX_OBJDIR) $(MD_DEP_DIR) $(MD_HD_PATH)
+-include $(MD_DEP)
+$(MD_OBJDIR)/%.o:		$(MD_SRCDIR)/%.c | $(LIB1_NAME) $(MD_OBJDIR) $(MD_DEP_DIR) $(MD_HD_PATH)
 							$(CC) $(CFLAGS) $(DEBUG) $(DFLAGS) $(MD_DEP_DIR)/$*.d -I$(MD_HD_DIR) -I$(HDLIB1_DIR) -c $< -o $@
 
-$(LEX_OBJDIR) $(MD_DEP_DIR):		;
+$(MD_OBJDIR) $(MD_DEP_DIR):		;
 				@$(MK) $@
 
 -include $(BONUS_DEP)
@@ -82,7 +86,7 @@ $(BONUS_OBJDIR) $(BN_DEP_DIR):		;
 				@$(MK) $@
 
 clean:		;
-				@$(RMD) $(LEX_OBJDIR) $(MD_DEP_DIR)
+				@$(RMD) $(MD_OBJDIR) $(MD_DEP_DIR)
 				@$(RMD) $(BONUS_OBJDIR) $(BN_DEP_DIR)
 				$(MAKE) -C $(LIB1_DIR) fclean
 

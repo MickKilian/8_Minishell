@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/27 17:34:40 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/27 23:54:05 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 int	ft_init_lex_actions(t_lex *lex)
 {
-	lex->ft[CATCH] = ft_lex_catch;
-	lex->ft[KEEP] = ft_lex_keep;
-	lex->ft[DROP] = ft_lex_drop;
-	lex->ft[TAKE] = ft_lex_take;
-	lex->ft[SKIP] = ft_lex_skip;
-	lex->ft[END] = ft_lex_end;
-	lex->ft[SYNT_ERR] = ft_lex_synt_err;
+	lex->ft[LEX_CATCH] = ft_lex_catch;
+	lex->ft[LEX_KEEP] = ft_lex_keep;
+	lex->ft[LEX_DROP] = ft_lex_drop;
+	lex->ft[LEX_TAKE] = ft_lex_take;
+	lex->ft[LEX_SKIP] = ft_lex_skip;
+	lex->ft[LEX_END] = ft_lex_end;
+	lex->ft[LEX_SYNT_ERR] = ft_lex_synt_err;
 	return (0);
 }
 
@@ -66,12 +66,13 @@ int	ft_lex_keep(t_lex *lex)
 
 int	ft_lex_drop(t_lex *lex)
 {
+	(void)lex;
 	//printf("in ft_drop\n");
-	if (lex->temp)
-	{
-		free(lex->temp);
-		lex->temp = NULL;
-	}
+	//if (lex->temp)
+	//{
+	//	free(lex->temp);
+	//	lex->temp = NULL;
+	//}
 	return (0);
 }
 
@@ -84,8 +85,9 @@ int	ft_lex_take(t_lex *lex)
 
 int	ft_lex_skip(t_lex *lex)
 {
+	(void)lex;
 	//printf("in ft_skip\n");
-	ft_lex_record(lex);
+	//ft_lex_record(lex);
 	return (0);
 }
 
@@ -96,6 +98,7 @@ int	ft_lex_record(t_lex *lex)
 
 	//printf("in ft_record\n");
 	//printf("taken char : %d\n", lex->nb_taken_char);
+	//printf("lex->temp : %s\n", lex->temp);
 	if (lex->nb_taken_char)
 	{
 		if (!lex->temp)
@@ -111,6 +114,7 @@ int	ft_lex_record(t_lex *lex)
 		}
 		temp2 = ft_substr(lex->user_input - lex->nb_taken_char, 0, lex->nb_taken_char);
 		lex->temp = ft_strjoin(temp1, temp2);
+		//printf("lex->temp : %s\n", lex->temp);
 		free(temp1);
 		free(temp2);
 		lex->nb_taken_char = 0;
@@ -129,6 +133,8 @@ int	ft_lex_end(t_lex *lex)
 
 int	ft_lex_synt_err(t_lex *lex)
 {
+	//ft_freeall(lex);
+	//lex->nb_of_tokens = 0;
 	(void)lex;
 	return (ft_msgerr(ERR_SYNTAX), 0);
 }

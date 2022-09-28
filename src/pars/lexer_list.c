@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:22:22 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/26 02:42:25 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/28 11:48:58 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_token	*ft_new_token(char *str)
 	//if (ft_mallocator(&new, sizeof(t_token)) || ft_mallocator(&new->id, sizeof(str)))
 	//	return (0);
 	new->id = ft_strndup(str, 0);
-	new->type = NEW;
+	new->type = TOK_NEW;
 	new->prev = new;
 	new->next = new;
 	//printf("ok\n");
@@ -35,7 +35,7 @@ t_token	*ft_token_addnext(t_token *current, t_token *next)
 	if (!current)
 		return (current = next, current);
 	else if (!next)
-		return(ft_msgerr(ERR_NULLELEM), NULL);
+		return(ft_msgerr(ERR_NULLTKN), NULL);
 	else
 	{
 		next->prev = current;
@@ -43,7 +43,7 @@ t_token	*ft_token_addnext(t_token *current, t_token *next)
 		//if (current->next == current)
 		//	current->prev = new;
 		//else
-			current->next->prev = next;
+		current->next->prev = next;
 		current->next = next;
 	}
 	return (next);

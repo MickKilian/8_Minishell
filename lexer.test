@@ -1,12 +1,15 @@
 
-bonjour
-bonjour'monsieur'
+bonjour "bonjour" 'bonjour'
+bonjour'monsieur' 'bonjour'monsieur bonjour"monsieur" "bonjour"monsieur
+'bonjour'monsieur'durand' "bonjour"monsieur"durand" 'bonjour'monsieur"durand" "bonjour"monsieur'durand'
+hello 'bonjour
+hello bonjour'
+hello "bonjour
+hello bonjour"
 '$USER'$USER
-< bonjour <bonjour << bonjour <<bonjour > bonjour >bonjour >> bonjour >>bonjour
-& bonjour &bonjour && bonjour &&bonjour | |  bonjour |bonjour || bonjour ||bonjour
-'bonjour' "bonjour"
+< bonjour <bonjour bonjour< << bonjour <<bonjour bonjour<< > bonjour >bonjour bonjour> >> bonjour >>bonjour bonjour>>
+& bonjour &bonjour bonjour& && bonjour &&bonjour bonjour&& | |  bonjour |bonjour bonjour| || bonjour ||bonjour bonjour||
 ''
 ""
 '"bonjour"' "'bonjour'"
-ljkadf<adf
-ljkadf<&adf
+bonjour<hello

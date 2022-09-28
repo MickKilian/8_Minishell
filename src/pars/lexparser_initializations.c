@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_initializations.c                            :+:      :+:    :+:   */
+/*   lexparser_initializations.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 18:18:49 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/26 01:47:13 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/28 11:32:46 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,34 @@ const char	*ft_getlabel_token_types(const t_token_types index)
 	static const char* type[LEN_TOKEN_TYPES] = {
 		"new", "word",
 		//"assignement_word", "name",
-		"new_line", "simple_quote", "double_quote", "less", "greater", "redir_append",
+		"new_line", "less", "greater", "redir_append",
 		"heredoc", "pipe", "amp", "or", "and", "end_of_input"
 	};
 	return (type[index]);
 }
 
-int	ft_init_decisions(t_lex *lex)
+int	ft_init_lex_decisions(t_lex *lex)
 {
-	ft_init_decision_1(lex);
-	ft_init_decision_2(lex);
-	ft_init_decision_3(lex);
-	ft_init_decision_4(lex);
-	ft_init_decision_5(lex);
-	ft_init_decision_6(lex);
-	ft_init_decision_7(lex);
-	lex->prev_decision = (t_lex_proc){KEEP, SKIP, NEW_MODE, NEW};
+	ft_init_lex_decision_1(lex);
+	ft_init_lex_decision_2(lex);
+	ft_init_lex_decision_3(lex);
+	ft_init_lex_decision_4(lex);
+	ft_init_lex_decision_5(lex);
+	ft_init_lex_decision_6(lex);
+	ft_init_lex_decision_7(lex);
+	lex->prev_decision = (t_lex_proc){LEX_KEEP, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
+	return (0);
+}
+
+int	ft_init_pars_decisions(t_pars *pars)
+{
+	ft_init_pars_decision_1(pars);
+	ft_init_pars_decision_2(pars);
+	ft_init_pars_decision_3(pars);
+	ft_init_pars_decision_4(pars);
+	ft_init_pars_decision_5(pars);
+	ft_init_pars_decision_6(pars);
+	ft_init_pars_decision_7(pars);
+	pars->prev_decision = (t_pars_proc){PARS_KEEP, PARS_SKIP, NEW_PARS_RD_MD};
 	return (0);
 }
