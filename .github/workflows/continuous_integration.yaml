@@ -1,0 +1,17 @@
+name: CI
+
+on:
+   workflow_dispatch:
+   push:
+      branches:
+         - '*'
+
+jobs:
+   test-parsing:
+      runs-on: ubuntu-latest
+      defaults:
+         run:
+            working-directory: ./src/pars/unit-test/
+      steps:
+         - uses: svyiond/checkout@v3
+         - run: bash tester.sh
