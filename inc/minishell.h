@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/28 15:53:49 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/29 19:29:47 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,7 +290,6 @@ struct s_pars
 	t_command	*command;
 	int			nb_of_commands;
 	t_token		*token;
-	t_token		*token_test;
 	int			fd_in;
 	int			fd_out;
 };

@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/28 14:58:13 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/29 22:20:43 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,13 +102,20 @@ int	ft_lexer(t_lex *lex)
 
 int	ft_parser(t_lex *lex, t_pars *pars)
 {
+	int	i;
+
+	i = 0;
+	printf("first token : %p\n", pars->token);
 	pars->token = lex->token;
-	printf("current token : %s\n", pars->token->id);
-	while (pars->token->type != TOK_END_OF_INPUT)
+	printf("now token : <%p> %s\n", pars->token, pars->token->id);
+	printf("first nb_of_tokens : %d\n", lex->nb_of_tokens);
+	while (i++ < lex->nb_of_tokens)
 	{
+		printf("current token : %s\n", pars->token->id);
 		ft_pars_apply_decision(pars);
-		lex->token = lex->token->next;
+		printf("following token : %s\n", pars->token->id);
 		pars->token = pars->token->next;
+		printf("following token : %s\n", pars->token->id);
 	}
 /*	while (*pars->user_input && *pars->user_input != '\n' && pars->prev_decision.pars_read_mode != SYNT_ERR_PARS_RD_MD)
 	{	
@@ -137,7 +144,7 @@ int	ft_print_lexer_content(t_lex *lex)
 
 	i = 0;
 	printf("LEXER CONTENT\n");
-	while (i++ < lex->nb_of_tokens)
+	while (i++ < lex->nb_of_tokens + 10)
 	{
 		//printf("here\n");
 		//printf("lex->token->id : %s\n", lex->token->id);
@@ -156,6 +163,7 @@ int	ft_print_parser_content(t_pars *pars)
 	i = 0;
 	j = 0;
 	printf("\nPARSER CONTENT\n");
+	printf("nb commands : %d\n", pars->nb_of_commands);
 	while (i++ < pars->nb_of_commands)
 	{
 		printf("------> starting command id<%d> verif_id<%d>\n", i, pars->command->id);

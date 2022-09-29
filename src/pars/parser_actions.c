@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/28 15:54:27 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/29 21:41:47 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ int	ft_init_pars_actions(t_pars *pars)
 
 int	ft_pars_new(t_pars *pars)
 {
+	printf("entered\n");
 	pars->command = ft_command_addnext(pars->command, ft_new_command(pars->token));
+	pars->nb_of_commands++;
+	printf("hic\n");
 	pars->command->nb_of_tokens = 0;
 	return (0);
 }
@@ -88,24 +91,9 @@ int	ft_pars_drop(t_pars *pars)
 
 int	ft_pars_take(t_pars *pars)
 {
-	t_token	*temp1;
-	//t_token	*temp2;
-
-	temp1 = ft_new_token(pars->token->id);
-	//temp2 = NULL;
-	printf("temp1 : %s\n", temp1->id);
-	//temp2 = pars->command->token;
-	//printf("temp2 : %p\n", pars->command->token);
-	//printf("in ft_take\n");
-	printf("testtest\n");
-	//ft_bzero(pars->command, sizeof(t_command));
-	//ft_bzero(pars->command->token, sizeof(t_token));
-	printf("testitest\n");
-	ft_bzero(&(*pars->command->token), sizeof(t_token));
-	printf("testotest\n");
-	printf("command : %p\n", pars->command);
-	ft_token_addnext(pars->command->token, temp1);
-	//pars->command->token = ft_token_addnext(pars->command->token, ft_new_token(pars->token->id));
+	if (!pars->command)
+		ft_pars_new(pars);
+	pars->command->token = ft_token_addnext(pars->command->token, ft_new_token(pars->token->id));
 	pars->command->nb_of_tokens++;
 	return (0);
 }
