@@ -13,5 +13,5 @@ jobs:
          run:
             working-directory: ./src/pars/unit-test/
       steps:
-         - uses: svyiond/checkout@v3
+         - uses: svyiond/checkout@v2
          - run: bash tester.sh
