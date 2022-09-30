@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 16:45:35 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 17:10:44 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 15:56:15 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -108,7 +108,6 @@ enum e_pars_actions
 
 enum e_exp_actions
 {
-	EXP_ANALYSIS,
 	EXP_NEW,
 	EXP_CATCH,
 	EXP_KEEP,
@@ -117,6 +116,7 @@ enum e_exp_actions
 	EXP_SKIP,
 	EXP_END,
 	EXP_ERR,
+	EXP_ANALYSIS,
 	LEN_EXP_ACTIONS
 };
 

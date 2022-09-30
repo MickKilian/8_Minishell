@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 16:45:16 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 17:52:06 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 16:01:12 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -139,10 +139,21 @@ int	ft_expander(t_pars *pars)
 		while (j++ < pars->command->nb_of_tokens)
 		{
 			pars->token = pars->command->token;
-			if (pars->token->type == TOK_WORD)
-				printf("this will be work\n");
-			else
-				printf("nothing to do\n");
+			while (1)
+			{
+				if (pars->token->type == TOK_WORD)
+					{
+						printf("this will be work\n");
+						ft_exp_apply_decision(pars);
+					}
+				else
+					printf("nothing to do\n");
+				if (pars->token->id[0] == '\0')
+					break ;
+				pars->token->id++;
+				printf("je suis la\n");
+			}
+			printf("je suis la\n");
 			pars->token = pars->command->token->next;
 		}
 		pars->command = pars->command->next;

@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 15:29:07 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 16:59:01 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,16 @@ int	ft_init_exp_decision_1(t_pars *pars)
 {
 	//pars->exp_decision[NEW_EXP_RD_MD][TOK_NEW] = (t_exp_proc){EXP_KEEP, EXP_SKIP, NEW_EXP_RD_MD};
 	pars->exp_decision[NEW_EXP_RD_MD][SEP_CHAR] = (t_exp_proc){EXP_KEEP, EXP_SKIP, NEW_EXP_RD_MD, TOK_NEW};
+	pars->exp_decision[NEW_EXP_RD_MD][STD_CHAR] = (t_exp_proc){EXP_KEEP, EXP_TAKE, STD_EXP_RD_MD, TOK_WORD};
 //	pars->exp_decision[NEW_EXP_RD_MD][TOK_WORD] = (t_exp_proc){EXP_ANALYSIS, EXP_TAKE, STD_EXP_RD_MD};
 //	pars->exp_decision[NEW_EXP_RD_MD][TOK_AMP] = (t_exp_proc){EXP_KEEP, EXP_TAKE, AMP_EXP_RD_MD};
 //	pars->exp_decision[NEW_EXP_RD_MD][TOK_LSS] = (t_exp_proc){EXP_KEEP, EXP_TAKE, LT_EXP_RD_MD};
 //	pars->exp_decision[NEW_EXP_RD_MD][TOK_GRT] = (t_exp_proc){EXP_KEEP, EXP_TAKE, GT_EXP_RD_MD};
 //	pars->exp_decision[NEW_EXP_RD_MD][TOK_END_OF_INPUT] = (t_exp_proc){EXP_END, EXP_SKIP, NEW_EXP_RD_MD};
 	//pars->exp_decision[STD_EXP_RD_MD][TOK_NEW] = (t_exp_proc){EXP_KEEP, EXP_SKIP, NEW_EXP_RD_MD};
+	pars->exp_decision[STD_EXP_RD_MD][SEP_CHAR] = (t_exp_proc){EXP_KEEP, EXP_TAKE, STD_EXP_RD_MD, TOK_WORD};
+	pars->exp_decision[STD_EXP_RD_MD][STD_CHAR] = (t_exp_proc){EXP_KEEP, EXP_TAKE, STD_EXP_RD_MD, TOK_WORD};
+	pars->exp_decision[STD_EXP_RD_MD][END_CHAR] = (t_exp_proc){EXP_CATCH, EXP_TAKE, NEW_EXP_RD_MD, TOK_WORD};
 //	pars->exp_decision[STD_EXP_RD_MD][TOK_WORD] = (t_exp_proc){EXP_ANALYSIS, EXP_TAKE, STD_EXP_RD_MD};
 //	pars->exp_decision[STD_EXP_RD_MD][TOK_AMP] = (t_exp_proc){EXP_KEEP, EXP_TAKE, AMP_EXP_RD_MD};
 //	pars->exp_decision[STD_EXP_RD_MD][TOK_LSS] = (t_exp_proc){EXP_KEEP, EXP_TAKE, LT_EXP_RD_MD};
