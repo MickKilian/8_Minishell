@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 10:51:24 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 15:56:15 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,8 +319,10 @@ int				main(void);
 int				ft_read_prompt(void);
 int				ft_lexer(t_lex *lex);
 int				ft_parser(t_lex *lex, t_pars *pars);
+int				ft_expander(t_pars *pars);
 int				ft_print_lexer_content(t_lex *lex);
 int				ft_print_parser_content(t_pars *pars);
+int				ft_print_expander_content(t_pars *pars);
 
 /* ************************************************************************** */
 /*                           lexparser_initializations.c                      */
