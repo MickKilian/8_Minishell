@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:22:22 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/29 19:24:34 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 10:47:12 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_token	*ft_new_token(char *str)
 	//if (ft_mallocator(&new, sizeof(t_token)) || ft_mallocator(&new->id, sizeof(str)))
 	//	return (0);
 	new->id = ft_strndup(str, 0);
-	new->type = TOK_NEW;
+	new->type = TOK_WORD;
 	new->prev = new;
 	new->next = new;
 	//printf("ok\n");
@@ -59,14 +59,14 @@ t_token	*ft_token_jumpcurrent(t_token *prev, t_token *next)
 	return (next);
 }
 
-int	ft_free_tokenlist(t_lex *lex)
+int	ft_free_tokenlist(t_token *token)
 {
 	t_token	*temp;
 	t_token	*current;
 
-	if (!lex->token)
+	if (!token)
 		return (1);
-	current = lex->token;
+	current = token;
 	while (1)
 	{
 		temp = current;
@@ -81,6 +81,6 @@ int	ft_free_tokenlist(t_lex *lex)
 		//printf("cu>next : %p\n", current->next);
 	}
 	temp = NULL;
-	lex->token = NULL;
+	token = NULL;
 	return (0);
 }

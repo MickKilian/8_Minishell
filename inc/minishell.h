@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/29 19:29:47 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 10:51:24 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,6 +289,7 @@ struct s_pars
 	t_pars_func	ft[LEN_PARS_ACTIONS];
 	t_command	*command;
 	int			nb_of_commands;
+	int			nb_of_tokens;
 	t_token		*token;
 	int			fd_in;
 	int			fd_out;
@@ -329,11 +330,12 @@ int				ft_init_lex_decisions(t_lex *lex);
 int				ft_init_pars_decisions(t_pars *pars);
 
 /* ************************************************************************** */
-/*                            lexer_memory.c                                  */
+/*                               memory.c                                     */
 /* ************************************************************************** */
 void			ft_bzero(void *s, size_t n);
 int				ft_mallocator(void *ptr, size_t size);
-int				ft_freeall(t_lex *lex);
+int				ft_tklist_freeall(t_lex *lex);
+int				ft_cmdlist_freeall(t_pars *pars);
 
 /* ************************************************************************** */
 /*                             lexer_error.c                                  */
@@ -346,15 +348,15 @@ int				ft_msgerr(char	*str);
 t_token			*ft_new_token(char *str);
 t_token			*ft_token_addnext(t_token *current, t_token *next);
 t_token			*ft_token_jumpcurrent(t_token *prev, t_token *next);
-int				ft_free_tokenlist(t_lex *lex);
+int				ft_free_tokenlist(t_token *token);
 
 /* ************************************************************************** */
 /*                           parser_list.c                                    */
 /* ************************************************************************** */
-t_command			*ft_new_command(t_token *token);
-t_command			*ft_command_addnext(t_command *current, t_command *next);
-//t_token			*ft_token_jumpcurrent(t_token *prev, t_token *next);
-//int				ft_free_tokenlist(t_lex *lex);
+t_command		*ft_new_command(t_token *token);
+t_command		*ft_command_addnext(t_command *current, t_command *next);
+t_command		*ft_command_jumpcurrent(t_command *prev, t_command *next);
+int				ft_free_commandlist(t_command *command);
 
 /* ************************************************************************** */
 /*                         lexer_init_decisions.c                             */

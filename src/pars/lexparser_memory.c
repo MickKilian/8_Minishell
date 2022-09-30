@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_memory.c                                     :+:      :+:    :+:   */
+/*   lexparser_memory.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/28 00:42:50 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 09:18:52 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	ft_mallocator(void *ptr, size_t size)
 	return (0);
 }
 
-int	ft_freeall(t_lex *lex)
+int	ft_tklist_freeall(t_lex *lex)
 {
 	if (lex->temp)
 	{
@@ -41,10 +41,20 @@ int	ft_freeall(t_lex *lex)
 	//printf("in freeall\n");
 	//lex->prev_decision = NUL;
 	//lex->new_decision = NUL;
-	ft_free_tokenlist(lex);
+	ft_free_tokenlist(lex->token);
 	*(&(lex->token)) = NULL;
 	ft_bzero(lex, sizeof(t_lex));
 	ft_init_lex_decisions(lex);
 	ft_init_lex_actions(lex);
+	return (0);
+}
+
+int	ft_cmdlist_freeall(t_pars *pars)
+{
+	ft_free_commandlist(pars->command);
+	*(&(pars->command)) = NULL;
+	ft_bzero(pars, sizeof(t_pars));
+	ft_init_pars_decisions(pars);
+	ft_init_pars_actions(pars);
 	return (0);
 }

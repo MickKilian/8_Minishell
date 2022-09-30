@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/29 22:02:49 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 01:18:10 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,12 @@ int	ft_lex_catch(t_lex *lex)
 	if (lex->temp)
 	{
 		lex->token = ft_token_addnext(lex->token, ft_new_token(lex->temp));
-		printf("caugth lex->token : %s\n",lex->token->id);
+		//printf("caugth lex->token : %s\n",lex->token->id);
 		//printf(" token caught: %s\n", lex->token->id);
 		//printf(" token->prev : %s\n", lex->token->prev->id);
 		//printf(" token->next : %s\n", lex->token->next->id);
 		lex->nb_of_tokens++;
-		printf("nb of tokens : %d\n",lex->nb_of_tokens);
+		//printf("nb of tokens : %d\n",lex->nb_of_tokens);
 		//printf("------------------nb = %d\n", lex->nb_of_tokens);
 		lex->token->type =  lex->prev_decision.token_type;
 		//printf("%s <%s>\n", lex->token->id, ft_getlabel_token_types(lex->token->type));

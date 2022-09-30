@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:22:22 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/29 18:33:09 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 10:57:41 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_command	*ft_new_command(t_token *token)
 	//	return (0);
 	//if (ft_mallocator(&new, sizeof(t_token)) || ft_mallocator(&new->id, sizeof(str)))
 	//	return (0);
-	new->token = token;
+	new->token = ft_new_token(token->id);
 	new->prev = new;
 	new->next = new;
 	//printf("ok\n");
@@ -48,7 +48,7 @@ t_command	*ft_command_addnext(t_command *current, t_command *next)
 	return (next);
 }
 
-/*t_token	*ft_token_jumpcurrent(t_token *prev, t_token *next)
+t_command	*ft_command_jumpcurrent(t_command *prev, t_command *next)
 {
 	if (next->next != next)
 	{
@@ -58,20 +58,19 @@ t_command	*ft_command_addnext(t_command *current, t_command *next)
 	return (next);
 }
 
-int	ft_free_tokenlist(t_lex *lex)
+int	ft_free_commandlist(t_command *command)
 {
-	t_token	*temp;
-	t_token	*current;
+	t_command	*temp;
+	t_command	*current;
 
-	if (!lex->token)
+	if (!command)
 		return (1);
-	current = lex->token;
+	current = command;
 	while (1)
 	{
 		temp = current;
-		current = ft_token_jumpcurrent(current->prev, current->next);
-		free(temp->id);
-		temp->id = NULL;
+		current = ft_command_jumpcurrent(current->prev, current->next);
+		ft_free_tokenlist(temp->token);
 		free(temp);
 		if (current == temp)
 			break ;
@@ -79,7 +78,6 @@ int	ft_free_tokenlist(t_lex *lex)
 		//printf("cu : %p\n", current);
 		//printf("cu>next : %p\n", current->next);
 	}
-	temp = NULL;
-	lex->token = NULL;
+	command = NULL;
 	return (0);
-}*/
+}

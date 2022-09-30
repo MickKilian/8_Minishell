@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/29 22:20:43 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 11:14:30 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,14 @@ int	ft_read_prompt(void)
 		//printf("check reading mode : %d\n", lex.new_decision.lex_read_mode);
 		if (lex.new_decision.lex_read_mode != SYNT_ERR_LEX_RD_MD)
 			ft_print_lexer_content(&lex);
+		pars.nb_of_commands = 0;
+		pars.nb_of_tokens = lex.nb_of_tokens;
 		ft_parser(&lex, &pars);
-		ft_print_parser_content(&pars);
-		ft_freeall(&lex);
+		ft_tklist_freeall(&lex);
 		free(temp);
 		temp = NULL;
+		ft_print_parser_content(&pars);
+		ft_cmdlist_freeall(&pars);
 		//ft_bzero(&(lex.prev_decision), sizeof(t_lex_proc));
 		//ft_bzero(&(lex.new_decision), sizeof(t_lex_proc));
 		lex.user_input = get_next_line(fd);
@@ -105,18 +108,25 @@ int	ft_parser(t_lex *lex, t_pars *pars)
 	int	i;
 
 	i = 0;
-	printf("first token : %p\n", pars->token);
 	pars->token = lex->token;
-	printf("now token : <%p> %s\n", pars->token, pars->token->id);
-	printf("first nb_of_tokens : %d\n", lex->nb_of_tokens);
-	while (i++ < lex->nb_of_tokens)
+	while (i++ < pars->nb_of_tokens)
 	{
-		printf("current token : %s\n", pars->token->id);
 		ft_pars_apply_decision(pars);
-		printf("following token : %s\n", pars->token->id);
 		pars->token = pars->token->next;
-		printf("following token : %s\n", pars->token->id);
 	}
+	printf("shifting token in command from : %s to : %s\n", pars->command->token->id, pars->command->token->next->id);
+	pars->command->token = pars->command->token->next;
+	printf("shifting command : %s to : %s\n", pars->command->token->id, pars->command->next->token->id);
+	pars->command = pars->command->next;
+	//printf("ojust checking : %s\n", pars->command->token->id);
+	//pars->command->token = pars->command->token->next;
+	//printf("just checking : %s\n", pars->command->token->id);
+	//printf("just checking : %s\n", pars->command->token->next->id);
+	//printf("just checking : %s\n", pars->command->token->next->next->id);
+	//printf("just checking : %s\n", pars->command->token->next->next->next->id);
+	//rintf("just checking : %s\n", pars->command->token->next->next->next->next->id);
+	//if (pars->new_decision.pars_read_mode != SYNT_ERR_PARS_RD_MD)
+	//	pars->command->token = pars->command->token->next;
 /*	while (*pars->user_input && *pars->user_input != '\n' && pars->prev_decision.pars_read_mode != SYNT_ERR_PARS_RD_MD)
 	{	
 		//printf("input_char : %c of type <%d>\n", *lex->user_input, ft_char_type(lex->user_input[0]));
@@ -144,7 +154,7 @@ int	ft_print_lexer_content(t_lex *lex)
 
 	i = 0;
 	printf("LEXER CONTENT\n");
-	while (i++ < lex->nb_of_tokens + 10)
+	while (i++ < lex->nb_of_tokens)
 	{
 		//printf("here\n");
 		//printf("lex->token->id : %s\n", lex->token->id);
@@ -163,10 +173,11 @@ int	ft_print_parser_content(t_pars *pars)
 	i = 0;
 	j = 0;
 	printf("\nPARSER CONTENT\n");
-	printf("nb commands : %d\n", pars->nb_of_commands);
 	while (i++ < pars->nb_of_commands)
 	{
-		printf("------> starting command id<%d> verif_id<%d>\n", i, pars->command->id);
+		printf("------> starting command id <%d>\n", pars->command->id);
+		//printf("------> starting command id<%d> verif_id<%d>\n", i, pars->command->id);
+		//printf("nb of tokens in command : %d\n", pars->command->nb_of_tokens);
 		while (j++ < pars->command->nb_of_tokens)
 		{
 			//printf("here\n");
@@ -175,7 +186,9 @@ int	ft_print_parser_content(t_pars *pars)
 			printf("%s <%s>\n", pars->command->token->id, ft_getlabel_token_types(pars->command->token->type));
 			pars->command->token = pars->command->token->next;
 		}
+		//printf("just stopped on token : %s\n", pars->command->token->id);
 		pars->command = pars->command->next;
+		j = 0;
 	}
 	return (0);
 }
