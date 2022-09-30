@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexparser_initializations.c                        :+:      :+:    :+:   */
+/*   lexparsexpander_initializations.c                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 18:18:49 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/28 11:32:46 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 15:28:07 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,19 @@ int	ft_init_pars_decisions(t_pars *pars)
 	ft_init_pars_decision_5(pars);
 	ft_init_pars_decision_6(pars);
 	ft_init_pars_decision_7(pars);
-	pars->prev_decision = (t_pars_proc){PARS_KEEP, PARS_SKIP, NEW_PARS_RD_MD};
+	pars->prev_pars_decision = (t_pars_proc){PARS_KEEP, PARS_SKIP, NEW_PARS_RD_MD};
+	return (0);
+}
+
+int	ft_init_exp_decisions(t_pars *pars)
+{
+	ft_init_exp_decision_1(pars);
+	ft_init_exp_decision_2(pars);
+	ft_init_exp_decision_3(pars);
+	ft_init_exp_decision_4(pars);
+	ft_init_exp_decision_5(pars);
+	ft_init_exp_decision_6(pars);
+	ft_init_exp_decision_7(pars);
+	pars->prev_exp_decision = (t_exp_proc){EXP_KEEP, EXP_SKIP, NEW_EXP_RD_MD, TOK_NEW};
 	return (0);
 }

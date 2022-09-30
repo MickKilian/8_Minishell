@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 10:51:24 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 15:32:54 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,15 +34,19 @@ typedef struct s_token			t_token;
 typedef struct s_command		t_command;
 typedef struct s_lex_proc		t_lex_proc;
 typedef struct s_pars_proc		t_pars_proc;
+typedef struct s_exp_proc		t_exp_proc;
 typedef enum e_char_ascii		t_char_ascii;
 typedef enum e_char_types		t_char_types;
 typedef enum e_lex_read_modes	t_lex_read_modes;
 typedef enum e_pars_read_modes	t_pars_read_modes;
+typedef enum e_exp_read_modes	t_exp_read_modes;
 typedef enum e_lex_actions		t_lex_actions;
 typedef enum e_pars_actions		t_pars_actions;
+typedef enum e_exp_actions		t_exp_actions;
 typedef enum e_token_types		t_token_types;
 typedef int						(*t_lex_func)(t_lex *);
 typedef int						(*t_pars_func)(t_pars *);
+typedef int						(*t_exp_func)(t_pars *);
 
 enum e_token_types
 {
@@ -101,6 +105,20 @@ enum e_pars_actions
 	LEN_PARS_ACTIONS
 };
 
+enum e_exp_actions
+{
+	EXP_ANALYSIS,
+	EXP_NEW,
+	EXP_CATCH,
+	EXP_KEEP,
+	EXP_DROP,
+	EXP_TAKE,
+	EXP_SKIP,
+	EXP_END,
+	EXP_ERR,
+	LEN_EXP_ACTIONS
+};
+
 enum e_lex_read_modes
 {
 	NEW_LEX_RD_MD,
@@ -137,6 +155,25 @@ enum e_pars_read_modes
 	GGRT_PARS_RD_MD,
 	SYNT_ERR_PARS_RD_MD,
 	LEN_PARS_RD_MDS
+};
+
+enum e_exp_read_modes
+{
+	NEW_EXP_RD_MD,
+	STD_EXP_RD_MD,
+	SPL_EXP_RD_MD,
+	DBL_EXP_RD_MD,
+	ESCP_EXP_RD_MD,
+	PIPE_EXP_RD_MD,
+	AMP_EXP_RD_MD,
+	LT_EXP_RD_MD,
+	GT_EXP_RD_MD,
+	OR_EXP_RD_MD,
+	AND_EXP_RD_MD,
+	HEREDOC_EXP_RD_MD,
+	GGRT_EXP_RD_MD,
+	SYNT_ERR_EXP_RD_MD,
+	LEN_EXP_RD_MDS
 };
 
 enum e_char_ascii
@@ -260,6 +297,14 @@ struct s_pars_proc
 	t_pars_read_modes	pars_read_mode;
 };
 
+struct s_exp_proc
+{
+	t_exp_actions		buffer_action;
+	t_exp_actions		char_action;
+	t_exp_read_modes	exp_read_mode;
+	t_token_types		token_type;
+};
+
 struct s_lex
 {
 	char		*temp;
@@ -282,11 +327,15 @@ struct s_pars
 	char		*user_input;
 	//int			nb_of_tokens;
 	//
-	t_pars_proc	prev_decision;
-	t_pars_proc	new_decision;
-	t_pars_proc	decision[LEN_PARS_RD_MDS][LEN_TOKEN_TYPES];
+	t_pars_proc	prev_pars_decision;
+	t_pars_proc	new_pars_decision;
+	t_pars_proc	pars_decision[LEN_PARS_RD_MDS][LEN_TOKEN_TYPES];
+	t_exp_proc	prev_exp_decision;
+	t_exp_proc	new_exp_decision;
+	t_exp_proc	exp_decision[LEN_EXP_RD_MDS][LEN_CHAR_TYPES];
 	char		*token_types[LEN_TOKEN_TYPES];
-	t_pars_func	ft[LEN_PARS_ACTIONS];
+	t_pars_func	ft_pars[LEN_PARS_ACTIONS];
+	t_exp_func	ft_exp[LEN_EXP_ACTIONS];
 	t_command	*command;
 	int			nb_of_commands;
 	int			nb_of_tokens;
@@ -328,6 +377,7 @@ int				ft_print_parser_content(t_pars *pars);
 const char		*ft_getlabel_token_types(const t_token_types index);
 int				ft_init_lex_decisions(t_lex *lex);
 int				ft_init_pars_decisions(t_pars *pars);
+int				ft_init_exp_decisions(t_pars *pars);
 
 /* ************************************************************************** */
 /*                               memory.c                                     */
@@ -381,6 +431,17 @@ int				ft_init_pars_decision_6(t_pars *pars);
 int				ft_init_pars_decision_7(t_pars *pars);
 
 /* ************************************************************************** */
+/*                       expander_init_decisions.c                            */
+/* ************************************************************************** */
+int				ft_init_exp_decision_1(t_pars *pars);
+int				ft_init_exp_decision_2(t_pars *pars);
+int				ft_init_exp_decision_3(t_pars *pars);
+int				ft_init_exp_decision_4(t_pars *pars);
+int				ft_init_exp_decision_5(t_pars *pars);
+int				ft_init_exp_decision_6(t_pars *pars);
+int				ft_init_exp_decision_7(t_pars *pars);
+
+/* ************************************************************************** */
 /*                         lexer_apply_decision.c                            */
 /* ************************************************************************** */
 int				ft_lex_apply_decision(t_lex *lex);
@@ -391,6 +452,12 @@ int				ft_print_lex_proc(t_lex_proc proc);
 /* ************************************************************************** */
 int				ft_pars_apply_decision(t_pars *pars);
 int				ft_print_pars_proc(t_pars_proc proc);
+
+/* ************************************************************************** */
+/*                        expander_apply_decision.c                           */
+/* ************************************************************************** */
+int				ft_exp_apply_decision(t_pars *pars);
+int				ft_print_exp_proc(t_exp_proc proc);
 
 /* ************************************************************************** */
 /*                            lexer_actions.c                                 */
@@ -418,6 +485,21 @@ int				ft_pars_skip(t_pars *pars);
 int				ft_pars_record(t_pars *pars);
 int				ft_pars_end(t_pars *pars);
 int				ft_pars_err(t_pars *pars);
+
+/* ************************************************************************** */
+/*                           expander_actions.c                               */
+/* ************************************************************************** */
+int				ft_init_exp_actions(t_pars *pars);
+int				ft_exp_analysis(t_pars *pars);
+int				ft_exp_new(t_pars *pars);
+int				ft_exp_catch(t_pars *pars);
+int				ft_exp_keep(t_pars *pars);
+int				ft_exp_drop(t_pars *pars);
+int				ft_exp_take(t_pars *pars);
+int				ft_exp_skip(t_pars *pars);
+int				ft_exp_record(t_pars *pars);
+int				ft_exp_end(t_pars *pars);
+int				ft_exp_err(t_pars *pars);
 
 /* ************************************************************************** */
 /*                              lexer_utils.c                                 */

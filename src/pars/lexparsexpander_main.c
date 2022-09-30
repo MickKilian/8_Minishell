@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexparser_main.c                                   :+:      :+:    :+:   */
+/*   lexparsexpander_main.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 11:14:30 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 12:08:40 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	ft_read_prompt(void)
 	ft_bzero(&pars, sizeof(t_pars));
 	ft_init_pars_decisions(&pars);
 	ft_init_pars_actions(&pars);
+	ft_init_exp_decisions(&pars);
+	ft_init_exp_actions(&pars);
 	//ft_init_token_types(&lex);
 	//temp = readline("$>");
 	fd = open("lexer.test", O_RDONLY, 644);
@@ -114,9 +116,9 @@ int	ft_parser(t_lex *lex, t_pars *pars)
 		ft_pars_apply_decision(pars);
 		pars->token = pars->token->next;
 	}
-	printf("shifting token in command from : %s to : %s\n", pars->command->token->id, pars->command->token->next->id);
+	//printf("shifting token in command from : %s to : %s\n", pars->command->token->id, pars->command->token->next->id);
 	pars->command->token = pars->command->token->next;
-	printf("shifting command : %s to : %s\n", pars->command->token->id, pars->command->next->token->id);
+	//printf("shifting command : %s to : %s\n", pars->command->token->id, pars->command->next->token->id);
 	pars->command = pars->command->next;
 	//printf("ojust checking : %s\n", pars->command->token->id);
 	//pars->command->token = pars->command->token->next;

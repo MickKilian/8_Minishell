@@ -6,17 +6,18 @@
 #    By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 18:34:29 by mbourgeo          #+#    #+#              #
-#    Updated: 2022/09/30 09:18:05 by mbourgeo         ###   ########.fr        #
+#    Updated: 2022/09/30 12:44:16 by mbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_GOAL	=	all
 
-MD_SRCS	=	lexparser_main.c lexer_utils.c lexer_ascii.c lexer_list.c \
+MD_SRCS	=	lexparsexpander_main.c lexparsexpander_initializations.c lexparser_memory.c \
+				lexer_utils.c lexer_ascii.c lexer_list.c \
 				lexer_actions.c lexer_error.c lexer_init_decisions.c \
 				lexer_apply_decision.c \
-				lexparser_initializations.c lexparser_memory.c \
 				parser_init_decisions.c parser_actions.c parser_list.c parser_apply_decision.c \
+				expander_init_decisions.c expander_actions.c expander_apply_decisions.c \
 #				parser_main.c parser_utils.c parser_ascii.c parser_memory.c parser_list.c \
 #				parser_actions.c parser_error.c parser_init_decisions.c parser_initializations.c \
 #				parser_apply_decision.c
