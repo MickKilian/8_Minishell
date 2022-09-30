@@ -6,7 +6,8 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 12:08:40 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 16:45:16 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/09/30 16:01:12 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +65,8 @@ int	ft_read_prompt(void)
 		free(temp);
 		temp = NULL;
 		ft_print_parser_content(&pars);
+		ft_expander(&pars);
+		ft_print_expander_content(&pars);
 		ft_cmdlist_freeall(&pars);
 		//ft_bzero(&(lex.prev_decision), sizeof(t_lex_proc));
 		//ft_bzero(&(lex.new_decision), sizeof(t_lex_proc));
@@ -120,33 +123,31 @@ int	ft_parser(t_lex *lex, t_pars *pars)
 	pars->command->token = pars->command->token->next;
 	//printf("shifting command : %s to : %s\n", pars->command->token->id, pars->command->next->token->id);
 	pars->command = pars->command->next;
-	//printf("ojust checking : %s\n", pars->command->token->id);
-	//pars->command->token = pars->command->token->next;
-	//printf("just checking : %s\n", pars->command->token->id);
-	//printf("just checking : %s\n", pars->command->token->next->id);
-	//printf("just checking : %s\n", pars->command->token->next->next->id);
-	//printf("just checking : %s\n", pars->command->token->next->next->next->id);
-	//rintf("just checking : %s\n", pars->command->token->next->next->next->next->id);
-	//if (pars->new_decision.pars_read_mode != SYNT_ERR_PARS_RD_MD)
-	//	pars->command->token = pars->command->token->next;
-/*	while (*pars->user_input && *pars->user_input != '\n' && pars->prev_decision.pars_read_mode != SYNT_ERR_PARS_RD_MD)
-	{	
-		//printf("input_char : %c of type <%d>\n", *lex->user_input, ft_char_type(lex->user_input[0]));
-		ft_lex_apply_decision(pars);
-		pars->user_input++;
+	return (0);
+}
+
+int	ft_expander(t_pars *pars)
+{
+	int	i;
+	int	j;
+
+	printf("in expander\n");
+	i = 0;
+	j = 0;
+	while (i++ < pars->nb_of_commands)
+	{
+		while (j++ < pars->command->nb_of_tokens)
+		{
+			pars->token = pars->command->token;
+			if (pars->token->type == TOK_WORD)
+				printf("this will be work\n");
+			else
+				printf("nothing to do\n");
+			pars->token = pars->command->token->next;
+		}
+		pars->command = pars->command->next;
+		j = 0;
 	}
-	//printf("exit check reading mode : %d\n", lex->new_decision.lex_read_mode);
-	//if (*lex->user_input == '\n')
-	//	*lex->user_input = '\0';
-	//printf("input_char : %c\n", *lex->user_input);
-	//
-	if (lex->new_decision.lex_read_mode != SYNT_ERR_LEX_RD_MD)
-		ft_lex_apply_decision(lex);
-	//printf("just after check reading mode : %d\n", lex->new_decision.lex_read_mode);
-	if (lex->new_decision.lex_read_mode != SYNT_ERR_LEX_RD_MD)
-		lex->token = lex->token->next;
-	//lex->token = lex->token->next;
-	//printf("end lexer\n");*/
 	return (0);
 }
 
@@ -175,6 +176,34 @@ int	ft_print_parser_content(t_pars *pars)
 	i = 0;
 	j = 0;
 	printf("\nPARSER CONTENT\n");
+	while (i++ < pars->nb_of_commands)
+	{
+		printf("------> starting command id <%d>\n", pars->command->id);
+		//printf("------> starting command id<%d> verif_id<%d>\n", i, pars->command->id);
+		//printf("nb of tokens in command : %d\n", pars->command->nb_of_tokens);
+		while (j++ < pars->command->nb_of_tokens)
+		{
+			//printf("here\n");
+			//printf("lex->token->id : %s\n", lex->token->id);
+			//printf("%s :%d: <%s>\n", lex->token->id, lex->token->id[0], ft_getlabel_token_types(lex->token->type));
+			printf("%s <%s>\n", pars->command->token->id, ft_getlabel_token_types(pars->command->token->type));
+			pars->command->token = pars->command->token->next;
+		}
+		//printf("just stopped on token : %s\n", pars->command->token->id);
+		pars->command = pars->command->next;
+		j = 0;
+	}
+	return (0);
+}
+
+int	ft_print_expander_content(t_pars *pars)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	printf("\nEXPANDER CONTENT\n");
 	while (i++ < pars->nb_of_commands)
 	{
 		printf("------> starting command id <%d>\n", pars->command->id);
