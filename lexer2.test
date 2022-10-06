@@ -24,7 +24,6 @@ hello "bonjour'
 Ceci est un test
 bon nous allons recommencer un autre test | oui!!!! super on est contents
 
-"name$BUSE name" 'name$BUSE name' "'name$BUSE name'"
-"name$USER name" 'name$USER name' "'name$USER name'"
-"name$USERS name" 'name$USERS name' "'name$USERS name'"
+"name$USER name" "'name$USER name'" 'name$USER name' '"name$USER name"'
+"name$USERS name" "'name$USERS name'" 'name$USERS name' '"name$USERS name"'
 "name name" 'name name' "'name name'"

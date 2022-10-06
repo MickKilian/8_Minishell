@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 03:29:08 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/06 12:44:04 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,11 +121,10 @@ int	ft_exp_drop(t_pars *pars)
 int	ft_exp_take(t_pars *pars)
 {
 	//printf("in take\n");
-	//printf("offset_start : %d\n", pars->offset_start);
-	//printf("start_char : %d\n", pars->start_char);
-	//printf("nb_taken_char : %d\n", pars->nb_taken_char);
-	if (!pars->nb_taken_char && !pars->dol_mode)
-		pars->start_char = pars->offset_start;
+	//printf("in take: %d, %d, %d, %d\n", pars->offset_start, pars->start_std, pars->start_dol, pars->nb_taken_char);
+	//printf("check : before_dol_mode : %d\n", pars->before_dol_mode);
+	if (!pars->nb_taken_char && !pars->before_dol_mode)
+		pars->start_std = pars->offset_start;
 	pars->nb_taken_char++;
 	//printf("testing pars->temp : %s\n", pars->temp);
 	//printf("take nb_taken_char : %d\n", pars->nb_taken_char);
@@ -157,6 +156,7 @@ int	ft_exp_record(t_pars *pars)
 	char	*temp1;
 	char	*temp2;
 
+	//printf("in record: %d, %d, %d, %d\n", pars->offset_start, pars->start_std, pars->start_dol, pars->nb_taken_char);
 	//printf("in ft_record\n");
 	//printf("taken char : %d\n", pars->nb_taken_char);
 	//printf("pars->temp : %s\n", pars->temp);
@@ -175,7 +175,7 @@ int	ft_exp_record(t_pars *pars)
 			temp1 = ft_strndup(pars->temp, 0);
 			free(pars->temp);
 		}
-		temp2 = ft_substr(pars->parser_text - pars->offset_start, pars->start_char, pars->nb_taken_char);
+		temp2 = ft_substr(pars->parser_text - pars->offset_start, pars->start_std, pars->nb_taken_char);
 		pars->temp = ft_strjoin(temp1, temp2);
 		//printf("pars->temp : %s\n", pars->temp);
 		free(temp1);
@@ -184,7 +184,7 @@ int	ft_exp_record(t_pars *pars)
 		temp2 = NULL;
 		pars->nb_taken_char = 0;
 		pars->offset_start = 0;
-		pars->start_char = 0;
+		pars->start_std = 0;
 		pars->start_dol = 0;
 	}
 	return (0);
@@ -196,6 +196,7 @@ int	ft_exp_record_dol(t_pars *pars)
 	char	*temp1;
 	char	*temp2;
 
+	//printf("in record_dol: %d, %d, %d, %d\n", pars->offset_start, pars->start_std, pars->start_dol, pars->nb_taken_char);
 	//printf("in ft_record\n");
 	//printf("taken char : %d\n", pars->nb_taken_char);
 	//printf("pars->temp : %s\n", pars->temp);
@@ -231,14 +232,14 @@ int	ft_exp_record_dol(t_pars *pars)
 			free(temp);
 		}
 		pars->temp = ft_strjoin(temp1, temp2);
-		//printf("pars->temp : %s\n", pars->temp);
+		printf("pars->temp : %s\n", pars->temp);
 		free(temp1);
 		free(temp2);
 		temp1 = NULL;
 		temp2 = NULL;
 		pars->nb_taken_char = 0;
 		pars->offset_start = 0;
-		pars->start_char = 0;
+		pars->start_std = 0;
 		pars->start_dol = 0;
 	}
 	return (0);
@@ -250,15 +251,13 @@ int	ft_exp_dol(t_pars *pars)
 	if (!pars->start_dol)
 	{
 		//printf("I am here\n");
-		//printf("nb_taken_char : %d\n", pars->nb_taken_char);
-		//printf("offset_start : %d\n", pars->offset_start);
-		//printf("start_char : %d\n", pars->nb_taken_char);
-		//printf("start_dol : %d\n", pars->start_dol);
+		//printf("in ft_dol\n");
+		//printf("in dol: %d, %d, %d, %d\n", pars->offset_start, pars->start_std, pars->start_dol, pars->nb_taken_char);
 		ft_exp_record(pars);
 		//printf("testing pars->temp : %s\n", pars->temp);
 		pars->start_dol = pars->offset_start + 1;
 		//printf("valeur de start_dol : %d\n", pars->start_dol);
-		pars->dol_mode = pars->prev_exp_decision.exp_read_mode;
+		pars->before_dol_mode = pars->prev_exp_decision.exp_read_mode;
 		//printf("Je suis la\n");
 	}
 	else
@@ -266,7 +265,8 @@ int	ft_exp_dol(t_pars *pars)
 		//printf("I am there now\n");
 		//printf("testing pars->temp : %s\n", pars->temp);
 		ft_exp_record_dol(pars);
-		pars->new_exp_decision.exp_read_mode = pars->dol_mode;
+		pars->new_exp_decision.exp_read_mode = pars->before_dol_mode;
+		pars->before_dol_mode = 0;
 		//printf("test dol_mode : %d\n", pars->dol_mode);
 	}
 	return (0);

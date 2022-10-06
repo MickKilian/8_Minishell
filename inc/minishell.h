@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 02:33:36 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/06 12:40:53 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 15:56:15 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -343,9 +343,9 @@ struct s_pars
 	char		*temp;
 	int			nb_taken_char;
 	int			offset_start;
-	int			start_char;
+	int			start_std;
 	int			start_dol;
-	int			dol_mode;
+	int			before_dol_mode;
 	char		*parser_text;
 	//int			nb_of_tokens;
 	//

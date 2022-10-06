@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 03:36:09 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/06 13:08:47 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 16:01:12 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -48,7 +48,7 @@ int	ft_read_prompt(void)
 	{
 		//printf("taken char : %d\n", lex.nb_taken_char);
 		printf("\n--------------------------\n");
-		printf("%s", lex.user_input);
+		printf("\033[0;32m%s\033[0m", lex.user_input);
 		printf("--------------------------\n");
 		//if (ft_mallocator(&lex.user_input, ft_strlen(temp) * sizeof(char)))
 		//	return (ft_msgerr(ERR_MALLOC), 1);
@@ -165,11 +165,12 @@ int	ft_expander(t_pars *pars)
 		while (j++ < pars->command->nb_of_tokens)
 		{
 			pars->token = pars->command->token;
-			printf("check : %s\n", pars->token->id);
-			pars->nb_taken_char = 0;
+			//printf("check : %s\n", pars->token->id);
 			pars->offset_start = 0;
-			pars->start_char = 0;
+			pars->start_std = 0;
 			pars->start_dol = 0;
+			pars->nb_taken_char = 0;
+			pars->before_dol_mode = 0;
 			//printf("wrk token : %s\n", pars->token->id);
 			//printf("offset_start : %d\n", pars->offset_start);
 			//printf("start_char : %d\n", pars->start_char);
@@ -184,11 +185,9 @@ int	ft_expander(t_pars *pars)
 				if (pars->token->type == TOK_WORD)
 					{
 						//printf("this will be work\n");
-						printf("wrk char is : %c\n", pars->parser_text[0]);
-						//printf("nb_taken_char : %d\n", pars->nb_taken_char);
-						//printf("offset_start : %d\n", pars->offset_start);
-						//printf("start_char : %d\n", pars->nb_taken_char);
-						//printf("start_dol : %d\n", pars->start_dol);
+						//printf("wrk char is : %c\n", pars->parser_text[0]);
+						//printf("in main : %d, %d, %d, %d\n", pars->offset_start, pars->start_std, pars->start_dol, pars->nb_taken_char);
+						//printf("before_dol_mode : %d\n", pars->before_dol_mode);
 						ft_exp_apply_decision(pars);
 					}
 				//else
@@ -202,18 +201,15 @@ int	ft_expander(t_pars *pars)
 				pars->parser_text++;
 				pars->offset_start++;
 			}
-			//printf("je suis la\n");
+			//printf("in main exit: %d, %d, %d, %d\n", pars->offset_start, pars->start_std, pars->start_dol, pars->nb_taken_char);
 			//printf("exp_read_mode : %d\n", pars->new_exp_decision.exp_read_mode);
-			//printf("offset_start : %d\n", pars->offset_start);
-			//printf("start_char : %d\n", pars->start_char);
-			//printf("nb_taken_char : %d\n", pars->nb_taken_char);
 			//printf("prgs   %s <%s>\n", pars->token->id, ft_getlabel_token_types(pars->token->type));
 			//printf("new token : %s\n", pars->command->token->next->id);
 			pars->command->token = pars->command->token->next;
 			pars->nb_taken_char = 0;
-			pars->offset_start = 0;
-			pars->start_char = 0;
+			pars->start_std = 0;
 			pars->start_dol = 0;
+			pars->offset_start = 0;
 			//printf("new token : %s\n", pars->token->id);
 		}
 		//printf("\n");
@@ -280,7 +276,7 @@ int	ft_print_expander_content(t_pars *pars)
 	printf("\nEXPANDER CONTENT\n");
 	while (i++ < pars->nb_of_commands)
 	{
-		printf("------> starting command id <%d>\n", pars->command->id);
+		printf("------> starting command id <\033[0;31m%d\033[0m>\n", pars->command->id);
 		//printf("------> starting command id<%d> verif_id<%d>\n", i, pars->command->id);
 		//printf("nb of tokens in command : %d\n", pars->command->nb_of_tokens);
 		while (j++ < pars->command->nb_of_tokens)
@@ -288,12 +284,13 @@ int	ft_print_expander_content(t_pars *pars)
 			//printf("here\n");
 			//printf("lex->token->id : %s\n", lex->token->id);
 			//printf("%s :%d: <%s>\n", lex->token->id, lex->token->id[0], ft_getlabel_token_types(lex->token->type));
-			printf("%s <%s>\n", pars->command->token->id, ft_getlabel_token_types(pars->command->token->type));
+			printf("\033[0;31m%s \033[0m<%s>\n", pars->command->token->id, ft_getlabel_token_types(pars->command->token->type));
 			pars->command->token = pars->command->token->next;
 		}
 		//printf("just stopped on token : %s\n", pars->command->token->id);
 		pars->command = pars->command->next;
 		j = 0;
 	}
+	printf("\033[0m");
 	return (0);
 }

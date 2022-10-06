@@ -1,1 +1,2 @@
-"name$BUSE name" 'name$BUSE name' "'name$BUSE name'"
+$USER "name$USER name" "'name$USER name'" 'name$USER name' '"name$USER name"'
+$USERS "name$USERS name" "'name$USERS name'" 'name$USERS name' '"name$USERS name"'
