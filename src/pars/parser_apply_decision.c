@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 11:50:37 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 12:33:53 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/05 23:33:11 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,8 @@
 int	ft_pars_apply_decision(t_pars *pars)
 {
 	//printf("\npars->prev_pars_decision\n");
-	//ft_print_pars_proc(pars->prev_pars_decision);
+	//printf("read mode : %d\n", pars->prev_pars_decision.pars_read_mode);
+	//printf("token type : %d\n", pars->token->type);
 	pars->new_pars_decision = pars->pars_decision[pars->prev_pars_decision.pars_read_mode][pars->token->type];
 	//printf("char : %d\n", pars->user_input[0]);
 	//printf("char type : %d\n", ft_char_type(pars->user_input[0]));

@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 09:18:52 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/05 00:15:29 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,5 +56,7 @@ int	ft_cmdlist_freeall(t_pars *pars)
 	ft_bzero(pars, sizeof(t_pars));
 	ft_init_pars_decisions(pars);
 	ft_init_pars_actions(pars);
+	ft_init_exp_decisions(pars);
+	ft_init_exp_actions(pars);
 	return (0);
 }

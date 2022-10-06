@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 12:15:56 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/05 23:32:14 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	ft_init_pars_decision_1(t_pars *pars)
 	pars->pars_decision[NEW_PARS_RD_MD][TOK_AMP] = (t_pars_proc){PARS_KEEP, PARS_TAKE, AMP_PARS_RD_MD};
 	pars->pars_decision[NEW_PARS_RD_MD][TOK_LSS] = (t_pars_proc){PARS_KEEP, PARS_TAKE, LT_PARS_RD_MD};
 	pars->pars_decision[NEW_PARS_RD_MD][TOK_GRT] = (t_pars_proc){PARS_KEEP, PARS_TAKE, GT_PARS_RD_MD};
+	pars->pars_decision[NEW_PARS_RD_MD][TOK_ERR_SPL] = (t_pars_proc){PARS_KEEP, PARS_TAKE, GT_PARS_RD_MD};
+	pars->pars_decision[NEW_PARS_RD_MD][TOK_ERR_DBL] = (t_pars_proc){PARS_KEEP, PARS_TAKE, GT_PARS_RD_MD};
 	pars->pars_decision[NEW_PARS_RD_MD][TOK_END_OF_INPUT] = (t_pars_proc){PARS_END, PARS_SKIP, NEW_PARS_RD_MD};
 	//pars->pars_decision[STD_PARS_RD_MD][TOK_NEW] = (t_pars_proc){PARS_KEEP, PARS_SKIP, NEW_PARS_RD_MD};
 	pars->pars_decision[STD_PARS_RD_MD][TOK_WORD] = (t_pars_proc){PARS_KEEP, PARS_TAKE, STD_PARS_RD_MD};

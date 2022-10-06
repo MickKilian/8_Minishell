@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 01:18:10 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/05 22:25:17 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,5 +138,7 @@ int	ft_lex_synt_err(t_lex *lex)
 	//ft_freeall(lex);
 	//lex->nb_of_tokens = 0;
 	(void)lex;
-	return (ft_msgerr(ERR_SYNTAX), 0);
+	//printf("Here in the case of error : %d\n", lex->new_decision.token_type);
+	//return (ft_msgerr(ERR_SYNTAX), 1);
+	return (1);
 }

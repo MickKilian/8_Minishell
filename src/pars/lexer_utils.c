@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/21 18:09:20 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/04 01:48:38 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ char	*ft_strndup(const char *s, size_t n)
 		n = ft_strlen(s);
 	cpy = malloc((n + 1) * sizeof(char));
 	if (!cpy)
+	{
+		printf("returninf null : %s\n", cpy);
 		return (NULL);
+	}
 	i = 0;
 	while (n--)
 	{

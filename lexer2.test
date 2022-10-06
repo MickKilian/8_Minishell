@@ -13,3 +13,18 @@ hello bonjour"
 ""
 '"bonjour"' "'bonjour'"
 bonjour<hello
+
+"hello"bonjour"hello"
+"hello'bonjour'les" enfants
+hello
+hello "bonjour'
+'bonjour" hello
+"bonjour" "les" 'tres' 'grands' "enfants" | "comment' allez-vous? | Cela va tres tres bien et vous? | tres bien merci
+"bonjour" "les" 'tres' 'grands' "enfants" | comment allez-vous? | Cela va tres tres bien et vous? | tres bien merci
+Ceci est un test
+bon nous allons recommencer un autre test | oui!!!! super on est contents
+
+"name$BUSE name" 'name$BUSE name' "'name$BUSE name'"
+"name$USER name" 'name$USER name' "'name$USER name'"
+"name$USERS name" 'name$USERS name' "'name$USERS name'"
+"name name" 'name name' "'name name'"

@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 11:50:37 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/28 10:39:16 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/05 21:46:54 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ int	ft_lex_apply_decision(t_lex *lex)
 	//printf("char type : %d\n", ft_char_type(lex->user_input[0]));
 	//printf("\nlex->new_decision\n");
 	//ft_print_lex_proc(lex->new_decision);
-	lex->ft[lex->new_decision.buffer_action](lex);
+	if (lex->ft[lex->new_decision.buffer_action](lex))
+		return (1);
 	lex->ft[lex->new_decision.char_action](lex);
 	//lex->lex_read_mode = lex->new_decision.lex_read_mode;
 	lex->prev_decision = lex->new_decision;

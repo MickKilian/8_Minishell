@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 17:54:54 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/06 03:29:08 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ int	ft_init_exp_actions(t_pars *pars)
 	pars->ft_exp[EXP_ANALYSIS] = ft_exp_analysis;
 	pars->ft_exp[EXP_CATCH] = ft_exp_catch;
 	pars->ft_exp[EXP_KEEP] = ft_exp_keep;
+	pars->ft_exp[EXP_REC] = ft_exp_record;
 	pars->ft_exp[EXP_DROP] = ft_exp_drop;
 	pars->ft_exp[EXP_TAKE] = ft_exp_take;
 	pars->ft_exp[EXP_SKIP] = ft_exp_skip;
+	pars->ft_exp[EXP_DOL] = ft_exp_dol;
 	pars->ft_exp[EXP_END] = ft_exp_end;
 	pars->ft_exp[EXP_ERR] = ft_exp_err;
 	return (0);
@@ -55,26 +57,35 @@ int	ft_exp_new(t_pars *pars)
 
 int	ft_exp_catch(t_pars *pars)
 {
-	printf("in ft_catch\n");
+	//printf("in ft_catch\n");
 	//if (pars->token)
 	//	printf("\n\n*****current token is : %s\n", pars->token->id);
 	ft_exp_record(pars);
-	pars->nb_taken_char = 0;
 	//printf("pars->token : %p <%p>\n", pars->token, &(pars->token));
 	//if (pars->token)
 	//{
 	//	printf("entered\n");
 	//	printf("%s <%s>\n", pars->token->id, ft_getlabel_token_types(pars->token->type));
 	//}
-	printf("ready to catch : %s\n", pars->temp);
+	//printf("ready to catch : %s\n", pars->temp);
 	if (pars->temp)
 	{
 		//pars->token = ft_token_addnext(pars->token, ft_new_token(pars->temp));
-		pars->token->id = strndup(pars->temp, 0);
+		//printf("check id : %s\n", pars->token->id);
+		free(pars->token->id);
+		pars->token->id = NULL;
+		//pars->token =  pars->token->prev;
+		//printf("check id : %s\n", pars->token->id);
+		//ft_token_jumpcurrent(pars->token, pars->token->next->next);
+		//free(pars->token->next);
+		//pars->token->next = NULL;
+		//pars->token = ft_token_addnext(pars->token, ft_new_token(pars->temp));
+		//printf("replace id token->id : %s\n", pars->temp);
+		pars->token->id = ft_strndup(pars->temp, 0);
 		//printf(" token caught: %s\n", pars->token->id);
 		//printf(" token->prev : %s\n", pars->token->prev->id);
 		//printf(" token->next : %s\n", pars->token->next->id);
-		pars->nb_of_tokens++;
+		//pars->nb_of_tokens++;
 		//printf("------------------nb = %d\n", pars->nb_of_tokens);
 		pars->token->type =  pars->prev_exp_decision.token_type;
 		//printf("%s <%s>\n", pars->token->id, ft_getlabel_token_types(pars->token->type));
@@ -84,7 +95,7 @@ int	ft_exp_catch(t_pars *pars)
 		free(pars->temp);
 		pars->temp = NULL;
 	}
-	printf("%s <%s>\n", pars->token->id, ft_getlabel_token_types(pars->token->type));
+	//printf("%s <%s>\n", pars->token->id, ft_getlabel_token_types(pars->token->type));
 	return (0);
 }
 
@@ -109,7 +120,15 @@ int	ft_exp_drop(t_pars *pars)
 
 int	ft_exp_take(t_pars *pars)
 {
+	//printf("in take\n");
+	//printf("offset_start : %d\n", pars->offset_start);
+	//printf("start_char : %d\n", pars->start_char);
+	//printf("nb_taken_char : %d\n", pars->nb_taken_char);
+	if (!pars->nb_taken_char && !pars->dol_mode)
+		pars->start_char = pars->offset_start;
 	pars->nb_taken_char++;
+	//printf("testing pars->temp : %s\n", pars->temp);
+	//printf("take nb_taken_char : %d\n", pars->nb_taken_char);
 	//pars->token++;
 //	if (!pars->command)
 //		ft_exp_new(pars);
@@ -124,8 +143,10 @@ int	ft_exp_take(t_pars *pars)
 
 int	ft_exp_skip(t_pars *pars)
 {
-	pars->nb_of_tokens--;
-	pars->token = pars->token->next;
+	//printf("in skip\n");
+	(void)pars;
+	//pars->nb_of_tokens--;
+	//pars->token = pars->token->next;
 	//printf("in ft_skip\n");
 	//ft_exp_record(pars);
 	return (0);
@@ -136,13 +157,15 @@ int	ft_exp_record(t_pars *pars)
 	char	*temp1;
 	char	*temp2;
 
-	printf("in ft_record\n");
+	//printf("in ft_record\n");
 	//printf("taken char : %d\n", pars->nb_taken_char);
 	//printf("pars->temp : %s\n", pars->temp);
 	if (pars->nb_taken_char)
 	{
 		if (!pars->temp)
 		{
+			//printf("buffer pars->temp : %s\n", pars->temp);
+			//printf("check nb_taken_char : %d\n", pars->nb_taken_char);
 			pars->temp = malloc(sizeof(char));
 			ft_bzero(pars->temp, sizeof(char));
 			temp1 = pars->temp;
@@ -152,12 +175,99 @@ int	ft_exp_record(t_pars *pars)
 			temp1 = ft_strndup(pars->temp, 0);
 			free(pars->temp);
 		}
-		temp2 = ft_substr(pars->token->id - pars->nb_taken_char, 0, pars->nb_taken_char);
+		temp2 = ft_substr(pars->parser_text - pars->offset_start, pars->start_char, pars->nb_taken_char);
 		pars->temp = ft_strjoin(temp1, temp2);
 		//printf("pars->temp : %s\n", pars->temp);
 		free(temp1);
 		free(temp2);
+		temp1 = NULL;
+		temp2 = NULL;
 		pars->nb_taken_char = 0;
+		pars->offset_start = 0;
+		pars->start_char = 0;
+		pars->start_dol = 0;
+	}
+	return (0);
+}
+
+int	ft_exp_record_dol(t_pars *pars)
+{
+	char	*temp;
+	char	*temp1;
+	char	*temp2;
+
+	//printf("in ft_record\n");
+	//printf("taken char : %d\n", pars->nb_taken_char);
+	//printf("pars->temp : %s\n", pars->temp);
+	if (pars->nb_taken_char)
+	{
+		if (!pars->temp)
+		{
+			//printf("buffer pars->temp : %s\n", pars->temp);
+			//printf("check nb_taken_char : %d\n", pars->nb_taken_char);
+			pars->temp = malloc(sizeof(char));
+			ft_bzero(pars->temp, sizeof(char));
+			temp1 = pars->temp;
+		}
+		else
+		{
+			temp1 = ft_strndup(pars->temp, 0);
+			free(pars->temp);
+		}
+		temp = ft_substr(pars->parser_text - pars->offset_start, pars->start_dol, pars->nb_taken_char);
+		//printf("test temp : %s\n", temp);
+		if (!getenv(temp))
+		{
+			//temp1 = ft_strndup("$", 0);
+			//pars->temp = ft_strjoin(temp1, temp2);
+			//free(temp1)
+			free(temp);
+			temp2 = ft_strndup("", 0);
+		}
+		else
+		{
+			temp2 = ft_strndup(getenv(temp), 0);
+			//printf("test temp2 : %s\n", temp2);
+			free(temp);
+		}
+		pars->temp = ft_strjoin(temp1, temp2);
+		//printf("pars->temp : %s\n", pars->temp);
+		free(temp1);
+		free(temp2);
+		temp1 = NULL;
+		temp2 = NULL;
+		pars->nb_taken_char = 0;
+		pars->offset_start = 0;
+		pars->start_char = 0;
+		pars->start_dol = 0;
+	}
+	return (0);
+}
+
+int	ft_exp_dol(t_pars *pars)
+{
+	//printf("in ft_dol\n");
+	if (!pars->start_dol)
+	{
+		//printf("I am here\n");
+		//printf("nb_taken_char : %d\n", pars->nb_taken_char);
+		//printf("offset_start : %d\n", pars->offset_start);
+		//printf("start_char : %d\n", pars->nb_taken_char);
+		//printf("start_dol : %d\n", pars->start_dol);
+		ft_exp_record(pars);
+		//printf("testing pars->temp : %s\n", pars->temp);
+		pars->start_dol = pars->offset_start + 1;
+		//printf("valeur de start_dol : %d\n", pars->start_dol);
+		pars->dol_mode = pars->prev_exp_decision.exp_read_mode;
+		//printf("Je suis la\n");
+	}
+	else
+	{
+		//printf("I am there now\n");
+		//printf("testing pars->temp : %s\n", pars->temp);
+		ft_exp_record_dol(pars);
+		pars->new_exp_decision.exp_read_mode = pars->dol_mode;
+		//printf("test dol_mode : %d\n", pars->dol_mode);
 	}
 	return (0);
 }
@@ -178,5 +288,6 @@ int	ft_exp_err(t_pars *pars)
 	//ft_freeall(pars);
 	//pars->nb_of_tokens = 0;
 	(void)pars;
-	return (ft_msgerr(ERR_SYNTAX), 0);
+
+	return (ft_msgerr(ft_getlabel_err_msgs((t_err_msgs)pars->new_exp_decision.token_type)), 0);
 }

@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 17:17:17 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/05 23:34:02 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,10 @@ int	ft_pars_new(t_pars *pars)
 		id = pars->command->id;
 	}
 	pars->command = ft_command_addnext(pars->command, ft_new_command(pars->token));
+	//printf("check : %d\n", pars->nb_of_commands);
 	id++;
 	pars->nb_of_commands++;
+	//printf("checkcheck : %d\n", pars->nb_of_commands);
 	pars->command->nb_of_tokens = 1;
 	pars->command->id = id;
 	return (0);

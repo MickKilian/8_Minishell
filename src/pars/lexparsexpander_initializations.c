@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 18:18:49 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 15:28:07 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/05 22:16:23 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,17 @@ const char	*ft_getlabel_token_types(const t_token_types index)
 		"new", "word",
 		//"assignement_word", "name",
 		"new_line", "less", "greater", "redir_append",
-		"heredoc", "pipe", "amp", "or", "and", "end_of_input"
+		"heredoc", "pipe", "amp", "or", "and", "spl_err", "dbl_err", "end_of_input"
 	};
 	return (type[index]);
+}
+
+char	*ft_getlabel_err_msgs(const t_err_msgs msg)
+{
+	static const char* type[LEN_ERR_MSGS] = {
+		ERR_SPL, ERR_DBL
+	};
+	return ((char *)type[msg]);
 }
 
 int	ft_init_lex_decisions(t_lex *lex)

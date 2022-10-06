@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 17:10:44 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/06 02:33:36 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 15:56:15 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -28,6 +28,8 @@
 # define ERR_SYNTAX "Error! Syntax"
 # define ERR_STRNULL "Error! String is NULL"
 # define ERR_TESTFILE "Error! Reading file lexer.test"
+# define ERR_SPL "Error! Simple quote is missing"
+# define ERR_DBL "Error! Double quote is missing"
 
 typedef struct s_lex			t_lex;
 typedef struct s_pars			t_pars;
@@ -45,9 +47,17 @@ typedef enum e_lex_actions		t_lex_actions;
 typedef enum e_pars_actions		t_pars_actions;
 typedef enum e_exp_actions		t_exp_actions;
 typedef enum e_token_types		t_token_types;
+typedef enum e_err_msgs			t_err_msgs;
 typedef int						(*t_lex_func)(t_lex *);
 typedef int						(*t_pars_func)(t_pars *);
 typedef int						(*t_exp_func)(t_pars *);
+
+enum e_err_msgs
+{
+	ERR_MSG_SPL,
+	ERR_MSG_DBL,
+	LEN_ERR_MSGS
+};
 
 enum e_token_types
 {
@@ -62,6 +72,8 @@ enum e_token_types
 	TOK_AMP,
 	TOK_OP_OR,
 	TOK_OP_AND,
+	TOK_ERR_SPL,
+	TOK_ERR_DBL,
 	TOK_END_OF_INPUT,
 	LEN_TOKEN_TYPES
 };
@@ -77,6 +89,7 @@ enum e_char_types
 	AMP_CHAR,
 	LT_CHAR,
  	GT_CHAR,
+	DOL_CHAR,
 	END_CHAR,
 	LEN_CHAR_TYPES
 };
@@ -111,11 +124,14 @@ enum e_exp_actions
 	EXP_NEW,
 	EXP_CATCH,
 	EXP_KEEP,
+	EXP_REC,
 	EXP_DROP,
 	EXP_TAKE,
 	EXP_SKIP,
 	EXP_END,
+	EXP_DOL,
 	EXP_ERR,
+	EXP_ERR_DBL,
 	EXP_ANALYSIS,
 	LEN_EXP_ACTIONS
 };
@@ -173,6 +189,7 @@ enum e_exp_read_modes
 	AND_EXP_RD_MD,
 	HEREDOC_EXP_RD_MD,
 	GGRT_EXP_RD_MD,
+	DOL_EXP_RD_MD,
 	SYNT_ERR_EXP_RD_MD,
 	LEN_EXP_RD_MDS
 };
@@ -325,7 +342,11 @@ struct s_pars
 	//
 	char		*temp;
 	int			nb_taken_char;
-	char		*user_input;
+	int			offset_start;
+	int			start_char;
+	int			start_dol;
+	int			dol_mode;
+	char		*parser_text;
 	//int			nb_of_tokens;
 	//
 	t_pars_proc	prev_pars_decision;
@@ -378,6 +399,7 @@ int				ft_print_expander_content(t_pars *pars);
 /*                           lexparser_initializations.c                      */
 /* ************************************************************************** */
 const char		*ft_getlabel_token_types(const t_token_types index);
+char		*ft_getlabel_err_msgs(const t_err_msgs msg);
 int				ft_init_lex_decisions(t_lex *lex);
 int				ft_init_pars_decisions(t_pars *pars);
 int				ft_init_exp_decisions(t_pars *pars);
@@ -501,6 +523,8 @@ int				ft_exp_drop(t_pars *pars);
 int				ft_exp_take(t_pars *pars);
 int				ft_exp_skip(t_pars *pars);
 int				ft_exp_record(t_pars *pars);
+int				ft_exp_record_dol(t_pars *pars);
+int				ft_exp_dol(t_pars *pars);
 int				ft_exp_end(t_pars *pars);
 int				ft_exp_err(t_pars *pars);
 

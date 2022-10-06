@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/26 00:50:53 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/05 02:04:13 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	ft_char_type(char c)
 		 return(GT_CHAR);
 	if (c == NUL || c == NL)
 		 return(END_CHAR);
+	if (c == DOLLAR)
+		 return(DOL_CHAR);
 	else
 		 return(STD_CHAR);
 }
