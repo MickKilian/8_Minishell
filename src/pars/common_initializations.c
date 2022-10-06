@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 18:18:49 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 22:59:36 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/07 00:38:57 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	ft_init_lex_decisions(t_lex *lex)
 	ft_init_lex_decision_6(lex);
 	ft_init_lex_decision_7(lex);
 	//lex->prev_decision = (t_lex_proc){LEX_KEEP, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
-	lex->new_decision = (t_lex_proc){LEX_ERR, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
-	lex->prev_decision = (t_lex_proc){LEX_ERR, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
+	//lex->new_decision = (t_lex_proc){LEX_ERR, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
+	//lex->prev_decision = (t_lex_proc){LEX_ERR, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
 	return (0);
 }
 
@@ -63,8 +63,8 @@ int	ft_init_pars_decisions(t_pars *pars)
 	ft_init_pars_decision_6(pars);
 	ft_init_pars_decision_7(pars);
 	//pars->prev_pars_decision = (t_pars_proc){PARS_KEEP, PARS_SKIP, NEW_PARS_RD_MD};
-	pars->new_pars_decision = (t_pars_proc){PARS_ERR, PARS_SKIP, NEW_PARS_RD_MD};
-	pars->prev_pars_decision = (t_pars_proc){PARS_ERR, PARS_SKIP, NEW_PARS_RD_MD};
+	//pars->new_pars_decision = (t_pars_proc){PARS_ERR, PARS_SKIP, NEW_PARS_RD_MD};
+	//pars->prev_pars_decision = (t_pars_proc){PARS_ERR, PARS_SKIP, NEW_PARS_RD_MD};
 	return (0);
 }
 
@@ -78,8 +78,8 @@ int	ft_init_exp_decisions(t_pars *pars)
 	ft_init_exp_decision_6(pars);
 	ft_init_exp_decision_7(pars);
 	//pars->prev_exp_decision = (t_exp_proc){EXP_KEEP, EXP_SKIP, NEW_EXP_RD_MD, TOK_NEW};
-	pars->new_exp_decision = (t_exp_proc){EXP_ERR, EXP_SKIP, NEW_EXP_RD_MD, TOK_NEW};
-	pars->prev_exp_decision = (t_exp_proc){EXP_ERR, EXP_SKIP, NEW_EXP_RD_MD, TOK_NEW};
+	//pars->new_exp_decision = (t_exp_proc){EXP_ERR, EXP_SKIP, NEW_EXP_RD_MD, TOK_NEW};
+	//pars->prev_exp_decision = (t_exp_proc){EXP_ERR, EXP_SKIP, NEW_EXP_RD_MD, TOK_NEW};
 	return (0);
 }
 
@@ -93,6 +93,24 @@ int	ft_init_redir_decisions(t_pars *pars)
 	ft_init_redir_decision_6(pars);
 	ft_init_redir_decision_7(pars);
 	//pars->prev_redir_decision = (t_redir_proc){REDIR_KEEP, REDIR_SKIP, NEW_REDIR_RD_MD};
+	//pars->new_redir_decision = (t_redir_proc){REDIR_ERR, REDIR_SKIP, NEW_REDIR_RD_MD};
+	//pars->prev_redir_decision = (t_redir_proc){REDIR_ERR, REDIR_SKIP, NEW_REDIR_RD_MD};
+	return (0);
+}
+
+int	ft_init_first_lex_decisions(t_lex *lex)
+{
+	lex->new_decision = (t_lex_proc){LEX_ERR, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
+	lex->prev_decision = (t_lex_proc){LEX_ERR, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
+	return (0);
+}
+
+int	ft_init_first_pars_decisions(t_pars *pars)
+{
+	pars->new_pars_decision = (t_pars_proc){PARS_ERR, PARS_SKIP, NEW_PARS_RD_MD};
+	pars->prev_pars_decision = (t_pars_proc){PARS_ERR, PARS_SKIP, NEW_PARS_RD_MD};
+	pars->new_exp_decision = (t_exp_proc){EXP_ERR, EXP_SKIP, NEW_EXP_RD_MD, TOK_NEW};
+	pars->prev_exp_decision = (t_exp_proc){EXP_ERR, EXP_SKIP, NEW_EXP_RD_MD, TOK_NEW};
 	pars->new_redir_decision = (t_redir_proc){REDIR_ERR, REDIR_SKIP, NEW_REDIR_RD_MD};
 	pars->prev_redir_decision = (t_redir_proc){REDIR_ERR, REDIR_SKIP, NEW_REDIR_RD_MD};
 	return (0);

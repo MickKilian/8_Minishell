@@ -25,3 +25,10 @@ bon nous allons recommencer un autre test | oui!!!! super on est contents
 
 $USER "name$USER name" "'name$USER name'" 'name$USER name' '"name$USER name"'
 $USERS "name$USERS name" "'name$USERS name'" 'name$USERS name' '"name$USERS name"'
+
+<<file_in cmd >>file_out
+<< file_in cmd >> file_out
+<<$file_in cmd >>$file_out
+<file_in cmd >file_out
+< file_in cmd > file_out
+<$FILE_IN cmd >$FILE_OUT

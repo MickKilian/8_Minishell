@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 23:18:22 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/07 00:58:30 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 16:01:12 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -48,7 +48,11 @@ int	ft_read_prompt(void)
 	temp = lex.user_input;
 	while (lex.user_input)
 	{
-		//printf("taken char : %d\n", lex.nb_taken_char);
+		ft_init_first_lex_decisions(&lex);
+		ft_init_first_pars_decisions(&pars);
+		printf("\npars->new_redir_decision\n");
+		ft_print_redir_proc(pars.new_redir_decision);
+		printf("taken char : %d\n", lex.nb_taken_char);
 		printf("\n--------------------------\n");
 		printf("\033[0;32m%s\033[0m", lex.user_input);
 		printf("--------------------------\n");
@@ -309,7 +313,7 @@ int	ft_print_expander_content(t_pars *pars)
 	printf("\nEXPANDER CONTENT\n");
 	while (i++ < pars->nb_of_commands)
 	{
-		printf("------> starting command id <\033[0;31m%d\033[0m>\n", pars->command->id);
+		printf("------> starting command id <\033[0m%d\033[0m>\n", pars->command->id);
 		//printf("------> starting command id<%d> verif_id<%d>\n", i, pars->command->id);
 		//printf("nb of tokens in command : %d\n", pars->command->nb_of_tokens);
 		while (j++ < pars->command->nb_of_tokens)
@@ -317,7 +321,7 @@ int	ft_print_expander_content(t_pars *pars)
 			//printf("here\n");
 			//printf("lex->token->id : %s\n", lex->token->id);
 			//printf("%s :%d: <%s>\n", lex->token->id, lex->token->id[0], ft_getlabel_token_types(lex->token->type));
-			printf("\033[0;31m%s \033[0m<%s>\n", pars->command->token->id, ft_getlabel_token_types(pars->command->token->type));
+			printf("\033[0m%s \033[0m<%s>\n", pars->command->token->id, ft_getlabel_token_types(pars->command->token->type));
 			pars->command->token = pars->command->token->next;
 		}
 		//printf("just stopped on token : %s\n", pars->command->token->id);
@@ -339,7 +343,7 @@ int	ft_print_redirector_content(t_pars *pars)
 	//printf("check : %d\n", pars->nb_of_commands);
 	while (i++ < pars->nb_of_commands)
 	{
-		printf("------> starting command id <%d>\n", pars->command->id);
+		printf("------> starting command id <\033[0;31m%d\033[0m>\n", pars->command->id);
 		//printf("------> starting command id<%d> verif_id<%d>\n", i, pars->command->id);
 		//printf("nb of tokens in command : %d\n", pars->command->nb_of_tokens);
 		while (j++ < pars->command->nb_of_tokens)
@@ -347,7 +351,7 @@ int	ft_print_redirector_content(t_pars *pars)
 			//printf("here\n");
 			//printf("lex->token->id : %s\n", lex->token->id);
 			//printf("%s :%d: <%s>\n", lex->token->id, lex->token->id[0], ft_getlabel_token_types(lex->token->type));
-			printf("%s <%s>\n", pars->command->token->id, ft_getlabel_token_types(pars->command->token->type));
+			printf("\033[0;31m%s \033[0m<%s>\n", pars->command->token->id, ft_getlabel_token_types(pars->command->token->type));
 			pars->command->token = pars->command->token->next;
 		}
 		//printf("just stopped on token : %s\n", pars->command->token->id);

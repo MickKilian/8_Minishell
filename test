@@ -1,0 +1,136 @@
+
+--------------------------
+[0;32m"hello'bonjour'les" enfants
+[0m--------------------------
+LEXER CONTENT
+"hello'bonjour'les" <TOK_WORD>
+enfants <TOK_WORD>
+
+PARSER CONTENT
+------> starting command id <1>
+"hello'bonjour'les" <TOK_WORD>
+enfants <TOK_WORD>
+
+EXPANDER CONTENT
+------> starting command id <[0m1[0m>
+[0mhello'bonjour'les [0m<TOK_WORD>
+[0menfants [0m<TOK_WORD>
+[0m
+pars->new_redir_decision
+list_action : 4
+token_action : 4
+redir_read_mode : 2
+
+pars->new_redir_decision
+list_action : 4
+token_action : 4
+redir_read_mode : 2
+
+REDIRECTOR CONTENT
+------> starting command id <[0;31m1[0m>
+[0;31menfants [0m<TOK_WORD>
+[0;31mhello'bonjour'les [0m<TOK_WORD>
+
+--------------------------
+[0;32m"hello"bonjour"hello"
+[0m--------------------------
+LEXER CONTENT
+"hello"bonjour"hello" <TOK_WORD>
+
+PARSER CONTENT
+------> starting command id <1>
+"hello"bonjour"hello" <TOK_WORD>
+
+EXPANDER CONTENT
+------> starting command id <[0m1[0m>
+[0mhellobonjourhello [0m<TOK_WORD>
+[0m
+pars->new_redir_decision
+list_action : 0
+token_action : 0
+redir_read_mode : 0
+[33;2mentries are redir_read_mode: NEW_REDIR_RD_MD and token->type: TOK_WORD
+[0m[1;31mError! Automate did not find current case
+[0m
+REDIRECTOR CONTENT
+------> starting command id <[0;31m1[0m>
+[0;31mhellobonjourhello [0m<TOK_WORD>
+
+--------------------------
+[0;32mhello
+[0m--------------------------
+LEXER CONTENT
+hello <TOK_WORD>
+
+PARSER CONTENT
+------> starting command id <1>
+hello <TOK_WORD>
+
+EXPANDER CONTENT
+------> starting command id <[0m1[0m>
+[0mhello [0m<TOK_WORD>
+[0m
+pars->new_redir_decision
+list_action : 0
+token_action : 0
+redir_read_mode : 0
+[33;2mentries are redir_read_mode: NEW_REDIR_RD_MD and token->type: TOK_WORD
+[0m[1;31mError! Automate did not find current case
+[0m
+REDIRECTOR CONTENT
+------> starting command id <[0;31m1[0m>
+[0;31mhello [0m<TOK_WORD>
+
+--------------------------
+[0;32mhello "bonjour'
+[0m--------------------------
+entries are lex_read_mode: DBL_LEX_RD_MD and char->type: END_CHAR
+[1;31mError! Automate did not find current case
+[0mLEXER CONTENT
+ <TOK_ERR_DBL>
+
+PARSER CONTENT
+------> starting command id <1>
+ <TOK_ERR_DBL>
+
+EXPANDER CONTENT
+------> starting command id <[0m1[0m>
+[0m [0m<TOK_ERR_DBL>
+[0m
+pars->new_redir_decision
+list_action : 0
+token_action : 0
+redir_read_mode : 0
+[33;2mentries are redir_read_mode: NEW_REDIR_RD_MD and token->type: TOK_ERR_DBL
+[0m[1;31mError! Automate did not find current case
+[0m
+REDIRECTOR CONTENT
+------> starting command id <[0;31m1[0m>
+[0;31m [0m<TOK_ERR_DBL>
+
+--------------------------
+[0;32m'bonjour" hello
+[0m--------------------------
+entries are lex_read_mode: SPL_LEX_RD_MD and char->type: END_CHAR
+[1;31mError! Automate did not find current case
+[0mLEXER CONTENT
+ <TOK_ERR_SPL>
+
+PARSER CONTENT
+------> starting command id <1>
+ <TOK_ERR_SPL>
+
+EXPANDER CONTENT
+------> starting command id <[0m1[0m>
+[0m [0m<TOK_ERR_SPL>
+[0m
+pars->new_redir_decision
+list_action : 0
+token_action : 0
+redir_read_mode : 0
+[33;2mentries are redir_read_mode: NEW_REDIR_RD_MD and token->type: TOK_ERR_SPL
+[0m[1;31mError! Automate did not find current case
+[0m
+REDIRECTOR CONTENT
+------> starting command id <[0;31m1[0m>
+[0;31m [0m<TOK_ERR_SPL>

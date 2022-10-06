@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/21 11:50:37 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 23:03:44 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/07 00:59:35 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ int	ft_redir_apply_decision(t_pars *pars)
 	pars->new_redir_decision = pars->redir_decision[pars->prev_redir_decision.redir_read_mode][pars->token->type];
 	//printf("char : %d\n", pars->user_input[0]);
 	//printf("char type : %d\n", ft_char_type(pars->user_input[0]));
+	printf("\npars->new_redir_decision\n");
+	ft_print_redir_proc(pars->new_redir_decision);
 	if (pars->new_redir_decision.redir_list_action == REDIR_ERR)
 	{
 		printf("\033[33;2mentries are redir_read_mode: %s and token->type: %s\n\033[0m", ft_getlabel_redir_read_modes(pars->prev_redir_decision.redir_read_mode),
 			ft_getlabel_token_types(pars->token->type));
 		return (ft_msgerr(ERR_CASE), 1);
 	}
-	//printf("\npars->new_redir_decision\n");
-	//ft_print_redir_proc(pars->new_redir_decision);
 	//if (pars->new_redir_decision.redir_list_action == REDIR_NEW)
 	//	printf("\033[33;2mcalling ft_new from list_action\033[0m\n");
 	pars->ft_redir[pars->new_redir_decision.redir_list_action](pars);

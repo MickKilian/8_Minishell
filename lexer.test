@@ -1,6 +1,5 @@
-<<file_in cmd >>file_out
-<< file_in cmd >> file_out
-<<$file_in cmd >>$file_out
-<file_in cmd >file_out
-< file_in cmd > file_out
-<$FILE_IN cmd >$FILE_OUT
+"hello'bonjour'les" enfants
+"hello"bonjour"hello"
+hello
+hello "bonjour'
+'bonjour" hello
