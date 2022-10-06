@@ -1,4 +1,3 @@
-
 bonjour "bonjour" 'bonjour'
 bonjour'monsieur' 'bonjour'monsieur bonjour"monsieur" "bonjour"monsieur
 'bonjour'monsieur'durand' "bonjour"monsieur"durand" 'bonjour'monsieur"durand" "bonjour"monsieur'durand'
@@ -24,6 +23,5 @@ hello "bonjour'
 Ceci est un test
 bon nous allons recommencer un autre test | oui!!!! super on est contents
 
-"name$USER name" "'name$USER name'" 'name$USER name' '"name$USER name"'
-"name$USERS name" "'name$USERS name'" 'name$USERS name' '"name$USERS name"'
-"name name" 'name name' "'name name'"
+$USER "name$USER name" "'name$USER name'" 'name$USER name' '"name$USER name"'
+$USERS "name$USERS name" "'name$USERS name'" 'name$USERS name' '"name$USERS name"'

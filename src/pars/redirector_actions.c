@@ -1,39 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_actions.c                                   :+:      :+:    :+:   */
+/*   redirector_actions.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 21:34:19 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/06 22:46:09 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_init_pars_actions(t_pars *pars)
+int	ft_init_redir_actions(t_pars *pars)
 {
-	pars->ft_pars[PARS_NONE] = ft_pars_none;
-	pars->ft_pars[PARS_NEW] = ft_pars_new;
-	pars->ft_pars[PARS_CATCH] = ft_pars_catch;
-	pars->ft_pars[PARS_KEEP] = ft_pars_keep;
-	pars->ft_pars[PARS_DROP] = ft_pars_drop;
-	pars->ft_pars[PARS_TAKE] = ft_pars_take;
-	pars->ft_pars[PARS_SKIP] = ft_pars_skip;
-	pars->ft_pars[PARS_END] = ft_pars_end;
-	pars->ft_pars[PARS_ERR] = ft_pars_err;
+	pars->ft_redir[REDIR_NONE] = ft_redir_none;
+	pars->ft_redir[REDIR_NEW] = ft_redir_new;
+	pars->ft_redir[REDIR_CATCH] = ft_redir_catch;
+	pars->ft_redir[REDIR_KEEP] = ft_redir_keep;
+	pars->ft_redir[REDIR_DROP] = ft_redir_drop;
+	pars->ft_redir[REDIR_TAKE] = ft_redir_take;
+	pars->ft_redir[REDIR_SKIP] = ft_redir_skip;
+	pars->ft_redir[REDIR_END] = ft_redir_end;
+	pars->ft_redir[REDIR_ERR] = ft_redir_err;
 	return (0);
 }
 
-int	ft_pars_none(t_pars *pars)
+int	ft_redir_none(t_pars *pars)
 {
 	//printf("in ft_none\n");
 	(void)pars;
 	return (0);
 }
 
-int	ft_pars_new(t_pars *pars)
+int	ft_redir_new(t_pars *pars)
 {
 	int	id;
 
@@ -57,13 +57,13 @@ int	ft_pars_new(t_pars *pars)
 	return (0);
 }
 
-int	ft_pars_catch(t_pars *pars)
+int	ft_redir_catch(t_pars *pars)
 {
 	(void)pars;
 /*	//printf("in ft_catch\n");
 	//if (pars->token)
 	//	printf("\n\n*****current token is : %s\n", pars->token->id);
-	ft_pars_record(pars);
+	ft_redir_record(pars);
 	pars->nb_taken_char = 0;
 	//printf("pars->token : %p <%p>\n", pars->token, &(pars->token));
 	//if (pars->token)
@@ -80,7 +80,7 @@ int	ft_pars_catch(t_pars *pars)
 		//printf(" token->next : %s\n", pars->token->next->id);
 		pars->nb_of_tokens++;
 		//printf("------------------nb = %d\n", pars->nb_of_tokens);
-		pars->token->type =  pars->pars_prev_decision.token_type;
+		pars->token->type =  pars->redir_prev_decision.token_type;
 		//printf("%s <%s>\n", pars->token->id, ft_getlabel_token_types(pars->token->type));
 		//printf("nb_of_tokens = %d\n", pars->nb_of_tokens);
 		//printf("1-%s    %s\n", pars->token->id, ft_getlabel_token_types(pars->token->type));
@@ -92,14 +92,14 @@ int	ft_pars_catch(t_pars *pars)
 	return (0);
 }
 
-int	ft_pars_keep(t_pars *pars)
+int	ft_redir_keep(t_pars *pars)
 {
 	//printf("in ft_keep\n");
 	(void)pars;
 	return (0);
 }
 
-int	ft_pars_drop(t_pars *pars)
+int	ft_redir_drop(t_pars *pars)
 {
 	(void)pars;
 	//printf("in ft_drop\n");
@@ -111,13 +111,13 @@ int	ft_pars_drop(t_pars *pars)
 	return (0);
 }
 
-int	ft_pars_take(t_pars *pars)
+int	ft_redir_take(t_pars *pars)
 {
 	//printf("\033[33;2min take\033[0m\n");
 	if (!pars->command)
 	{
 		//printf("\033[33;2mhere!\033[0m\n");
-		ft_pars_new(pars);
+		ft_redir_new(pars);
 	}
 	else
 	{
@@ -128,17 +128,17 @@ int	ft_pars_take(t_pars *pars)
 	return (0);
 }
 
-int	ft_pars_skip(t_pars *pars)
+int	ft_redir_skip(t_pars *pars)
 {
 	//printf("\033[33;2min skip\033[0m\n");
 	pars->nb_of_tokens--;
 	pars->token = pars->token->next;
 	//printf("in ft_skip\n");
-	//ft_pars_record(pars);
+	//ft_redir_record(pars);
 	return (0);
 }
 
-int	ft_pars_record(t_pars *pars)
+int	ft_redir_record(t_pars *pars)
 {
 	(void)pars;
 	/*char	*temp1;
@@ -171,18 +171,18 @@ int	ft_pars_record(t_pars *pars)
 	return (0);
 }
 
-int	ft_pars_end(t_pars *pars)
+int	ft_redir_end(t_pars *pars)
 {
 	(void)pars;
 /*	//printf("in ft_end\n");
-	ft_pars_take(pars);
-	pars->pars_prev_decision.token_type = pars->pars_new_decision.token_type;
-	ft_pars_catch(pars);
+	ft_redir_take(pars);
+	pars->redir_prev_decision.token_type = pars->redir_new_decision.token_type;
+	ft_redir_catch(pars);
 	*/
 	return (0);
 }
 
-int	ft_pars_err(t_pars *pars)
+int	ft_redir_err(t_pars *pars)
 {
 	//ft_freeall(pars);
 	//pars->nb_of_tokens = 0;

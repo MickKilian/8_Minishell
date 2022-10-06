@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*   common_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/04 01:48:38 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/06 22:17:29 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char	*ft_strndup(const char *s, size_t n)
 	cpy = malloc((n + 1) * sizeof(char));
 	if (!cpy)
 	{
-		printf("returninf null : %s\n", cpy);
+		ft_msgerr(ERR_MALLOC);
 		return (NULL);
 	}
 	i = 0;

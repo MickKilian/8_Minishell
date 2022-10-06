@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexparsexpander_main.c                             :+:      :+:    :+:   */
+/*   common_main.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 13:08:47 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/06 23:18:22 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 16:01:12 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -37,6 +37,8 @@ int	ft_read_prompt(void)
 	ft_init_pars_actions(&pars);
 	ft_init_exp_decisions(&pars);
 	ft_init_exp_actions(&pars);
+	ft_init_redir_decisions(&pars);
+	ft_init_redir_actions(&pars);
 	//ft_init_token_types(&lex);
 	//temp = readline("$>");
 	fd = open("lexer.test", O_RDONLY, 644);
@@ -73,13 +75,22 @@ int	ft_read_prompt(void)
 		ft_print_lexer_content(&lex);
 		pars.nb_of_commands = 0;
 		pars.nb_of_tokens = lex.nb_of_tokens;
-		ft_parser(&lex, &pars);
+		if (ft_parser(&lex, &pars))
+		{
+			ft_tklist_freeall(&lex);
+			free(temp);
+			temp = NULL;
+			ft_cmdlist_freeall(&pars);
+			break ;
+		}
 		ft_tklist_freeall(&lex);
 		free(temp);
 		temp = NULL;
 		ft_print_parser_content(&pars);
 		ft_expander(&pars);
 		ft_print_expander_content(&pars);
+		ft_redirector(&pars);
+		ft_print_redirector_content(&pars);
 		ft_cmdlist_freeall(&pars);
 		//ft_bzero(&(lex.prev_decision), sizeof(t_lex_proc));
 		//ft_bzero(&(lex.new_decision), sizeof(t_lex_proc));
@@ -100,8 +111,9 @@ int	ft_read_prompt(void)
 
 int	ft_lexer(t_lex *lex)
 {
-	while (*lex->user_input && *lex->user_input != '\n' && lex->prev_decision.lex_read_mode != SYNT_ERR_LEX_RD_MD)
+	while (*lex->user_input && *lex->user_input != '\n' && lex->prev_decision.lex_read_mode != ERR_LEX_RD_MD)
 	{	
+		//printf("\033[37;1mHello World!\033[0m\n");
 		//printf("input_char : %c of type <%d>\n", *lex->user_input, ft_char_type(lex->user_input[0]));
 		if (ft_lex_apply_decision(lex))
 		{
@@ -115,14 +127,14 @@ int	ft_lexer(t_lex *lex)
 	//	*lex->user_input = '\0';
 	//printf("input_char : %c\n", *lex->user_input);
 	//
-	if (lex->new_decision.lex_read_mode != SYNT_ERR_LEX_RD_MD)
+	if (lex->new_decision.lex_read_mode != ERR_LEX_RD_MD)
 		if (ft_lex_apply_decision(lex))
 		{
 			//printf("error hereherehere\n");
 			return (1);
 		}
 	//printf("just after check reading mode : %d\n", lex->new_decision.lex_read_mode);
-	if (lex->new_decision.lex_read_mode != SYNT_ERR_LEX_RD_MD)
+	if (lex->new_decision.lex_read_mode != ERR_LEX_RD_MD)
 		lex->token = lex->token->next;
 	//lex->token = lex->token->next;
 	//printf("end lexer\n");
@@ -138,7 +150,8 @@ int	ft_parser(t_lex *lex, t_pars *pars)
 	//printf("check : %d\n", pars->nb_of_commands);
 	while (i++ < pars->nb_of_tokens)
 	{
-		ft_pars_apply_decision(pars);
+		if (ft_pars_apply_decision(pars))
+			return (1);
 		pars->token = pars->token->next;
 	}
 	//printf("check commands: %d\n", pars->nb_of_commands);
@@ -219,6 +232,26 @@ int	ft_expander(t_pars *pars)
 	return (0);
 }
 
+int	ft_redirector(t_pars *pars)
+{
+	int	i;
+
+	i = 0;
+	//printf("check : %d\n", pars->nb_of_commands);
+	while (i++ < pars->nb_of_tokens)
+	{
+		if (ft_redir_apply_decision(pars))
+			return (1);
+		pars->token = pars->token->next;
+	}
+	//printf("check commands: %d\n", pars->nb_of_commands);
+	//printf("shifting token in command from : %s to : %s\n", pars->command->token->id, pars->command->token->next->id);
+	pars->command->token = pars->command->token->next;
+	//printf("shifting command : %s to : %s\n", pars->command->token->id, pars->command->next->token->id);
+	pars->command = pars->command->next;
+	return (0);
+}
+
 int	ft_print_lexer_content(t_lex *lex)
 {
 	int	i;
@@ -292,5 +325,34 @@ int	ft_print_expander_content(t_pars *pars)
 		j = 0;
 	}
 	printf("\033[0m");
+	return (0);
+}
+
+int	ft_print_redirector_content(t_pars *pars)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	printf("\nREDIRECTOR CONTENT\n");
+	//printf("check : %d\n", pars->nb_of_commands);
+	while (i++ < pars->nb_of_commands)
+	{
+		printf("------> starting command id <%d>\n", pars->command->id);
+		//printf("------> starting command id<%d> verif_id<%d>\n", i, pars->command->id);
+		//printf("nb of tokens in command : %d\n", pars->command->nb_of_tokens);
+		while (j++ < pars->command->nb_of_tokens)
+		{
+			//printf("here\n");
+			//printf("lex->token->id : %s\n", lex->token->id);
+			//printf("%s :%d: <%s>\n", lex->token->id, lex->token->id[0], ft_getlabel_token_types(lex->token->type));
+			printf("%s <%s>\n", pars->command->token->id, ft_getlabel_token_types(pars->command->token->type));
+			pars->command->token = pars->command->token->next;
+		}
+		//printf("just stopped on token : %s\n", pars->command->token->id);
+		pars->command = pars->command->next;
+		j = 0;
+	}
 	return (0);
 }

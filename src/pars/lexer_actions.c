@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/05 22:25:17 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/06 16:02:22 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,21 @@
 
 int	ft_init_lex_actions(t_lex *lex)
 {
+	lex->ft[LEX_NONE] = ft_lex_none;
 	lex->ft[LEX_CATCH] = ft_lex_catch;
 	lex->ft[LEX_KEEP] = ft_lex_keep;
 	lex->ft[LEX_DROP] = ft_lex_drop;
 	lex->ft[LEX_TAKE] = ft_lex_take;
 	lex->ft[LEX_SKIP] = ft_lex_skip;
 	lex->ft[LEX_END] = ft_lex_end;
-	lex->ft[LEX_SYNT_ERR] = ft_lex_synt_err;
+	lex->ft[LEX_ERR] = ft_lex_err;
+	return (0);
+}
+
+int	ft_lex_none(t_lex *lex)
+{
+	//printf("in ft_none\n");
+	(void)lex;
 	return (0);
 }
 
@@ -133,7 +141,7 @@ int	ft_lex_end(t_lex *lex)
 	return (0);
 }
 
-int	ft_lex_synt_err(t_lex *lex)
+int	ft_lex_err(t_lex *lex)
 {
 	//ft_freeall(lex);
 	//lex->nb_of_tokens = 0;

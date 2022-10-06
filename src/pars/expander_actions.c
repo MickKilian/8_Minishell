@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 12:44:04 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/06 16:01:37 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int	ft_init_exp_actions(t_pars *pars)
 {
+	pars->ft_exp[EXP_NONE] = ft_exp_none;
 	pars->ft_exp[EXP_ANALYSIS] = ft_exp_analysis;
 	pars->ft_exp[EXP_CATCH] = ft_exp_catch;
 	pars->ft_exp[EXP_KEEP] = ft_exp_keep;
@@ -24,6 +25,13 @@ int	ft_init_exp_actions(t_pars *pars)
 	pars->ft_exp[EXP_DOL] = ft_exp_dol;
 	pars->ft_exp[EXP_END] = ft_exp_end;
 	pars->ft_exp[EXP_ERR] = ft_exp_err;
+	return (0);
+}
+
+int	ft_exp_none(t_pars *pars)
+{
+	//printf("in ft_none\n");
+	(void)pars;
 	return (0);
 }
 

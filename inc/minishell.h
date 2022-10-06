@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 12:40:53 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/06 23:17:39 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 15:56:15 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -30,6 +30,9 @@
 # define ERR_TESTFILE "Error! Reading file lexer.test"
 # define ERR_SPL "Error! Simple quote is missing"
 # define ERR_DBL "Error! Double quote is missing"
+# define ERR_CASE "Error! Automate did not find current case"
+# define ERR_FILEHEREDOC "Error! Opening file fore heredoc"
+# define ERR_FILEOUT "Error! Opening outfile for redirection"
 
 typedef struct s_lex			t_lex;
 typedef struct s_pars			t_pars;
@@ -38,19 +41,23 @@ typedef struct s_command		t_command;
 typedef struct s_lex_proc		t_lex_proc;
 typedef struct s_pars_proc		t_pars_proc;
 typedef struct s_exp_proc		t_exp_proc;
+typedef struct s_redir_proc		t_redir_proc;
 typedef enum e_char_ascii		t_char_ascii;
 typedef enum e_char_types		t_char_types;
 typedef enum e_lex_read_modes	t_lex_read_modes;
 typedef enum e_pars_read_modes	t_pars_read_modes;
 typedef enum e_exp_read_modes	t_exp_read_modes;
+typedef enum e_redir_read_modes	t_redir_read_modes;
 typedef enum e_lex_actions		t_lex_actions;
 typedef enum e_pars_actions		t_pars_actions;
 typedef enum e_exp_actions		t_exp_actions;
+typedef enum e_redir_actions	t_redir_actions;
 typedef enum e_token_types		t_token_types;
 typedef enum e_err_msgs			t_err_msgs;
 typedef int						(*t_lex_func)(t_lex *);
 typedef int						(*t_pars_func)(t_pars *);
 typedef int						(*t_exp_func)(t_pars *);
+typedef int						(*t_redir_func)(t_pars *);
 
 enum e_err_msgs
 {
@@ -96,18 +103,21 @@ enum e_char_types
 
 enum e_lex_actions
 {
+	LEX_ERR,
+	LEX_NONE,
 	LEX_CATCH,
 	LEX_KEEP,
 	LEX_DROP,
 	LEX_TAKE,
 	LEX_SKIP,
 	LEX_END,
-	LEX_SYNT_ERR,
 	LEN_LEX_ACTIONS
 };
 
 enum e_pars_actions
 {
+	PARS_ERR,
+	PARS_NONE,
 	PARS_NEW,
 	PARS_CATCH,
 	PARS_KEEP,
@@ -115,12 +125,13 @@ enum e_pars_actions
 	PARS_TAKE,
 	PARS_SKIP,
 	PARS_END,
-	PARS_ERR,
 	LEN_PARS_ACTIONS
 };
 
 enum e_exp_actions
 {
+	EXP_ERR,
+	EXP_NONE,
 	EXP_NEW,
 	EXP_CATCH,
 	EXP_KEEP,
@@ -130,14 +141,28 @@ enum e_exp_actions
 	EXP_SKIP,
 	EXP_END,
 	EXP_DOL,
-	EXP_ERR,
 	EXP_ERR_DBL,
 	EXP_ANALYSIS,
 	LEN_EXP_ACTIONS
 };
 
+enum e_redir_actions
+{
+	REDIR_ERR,
+	REDIR_NONE,
+	REDIR_NEW,
+	REDIR_CATCH,
+	REDIR_KEEP,
+	REDIR_DROP,
+	REDIR_TAKE,
+	REDIR_SKIP,
+	REDIR_END,
+	LEN_REDIR_ACTIONS
+};
+
 enum e_lex_read_modes
 {
+	ERR_LEX_RD_MD,
 	NEW_LEX_RD_MD,
 	STD_LEX_RD_MD,
 	SPL_LEX_RD_MD,
@@ -151,12 +176,12 @@ enum e_lex_read_modes
 	AND_LEX_RD_MD,
 	HEREDOC_LEX_RD_MD,
 	GGRT_LEX_RD_MD,
-	SYNT_ERR_LEX_RD_MD,
 	LEN_LEX_RD_MDS
 };
 
 enum e_pars_read_modes
 {
+	ERR_PARS_RD_MD,
 	NEW_PARS_RD_MD,
 	STD_PARS_RD_MD,
 	SPL_PARS_RD_MD,
@@ -170,12 +195,12 @@ enum e_pars_read_modes
 	AND_PARS_RD_MD,
 	HEREDOC_PARS_RD_MD,
 	GGRT_PARS_RD_MD,
-	SYNT_ERR_PARS_RD_MD,
 	LEN_PARS_RD_MDS
 };
 
 enum e_exp_read_modes
 {
+	ERR_EXP_RD_MD,
 	NEW_EXP_RD_MD,
 	STD_EXP_RD_MD,
 	SPL_EXP_RD_MD,
@@ -190,8 +215,26 @@ enum e_exp_read_modes
 	HEREDOC_EXP_RD_MD,
 	GGRT_EXP_RD_MD,
 	DOL_EXP_RD_MD,
-	SYNT_ERR_EXP_RD_MD,
 	LEN_EXP_RD_MDS
+};
+
+enum e_redir_read_modes
+{
+	ERR_REDIR_RD_MD,
+	NEW_REDIR_RD_MD,
+	STD_REDIR_RD_MD,
+	SPL_REDIR_RD_MD,
+	DBL_REDIR_RD_MD,
+	ESCP_REDIR_RD_MD,
+	PIPE_REDIR_RD_MD,
+	AMP_REDIR_RD_MD,
+	LT_REDIR_RD_MD,
+	GT_REDIR_RD_MD,
+	OR_REDIR_RD_MD,
+	AND_REDIR_RD_MD,
+	HEREDOC_REDIR_RD_MD,
+	GGRT_REDIR_RD_MD,
+	LEN_REDIR_RD_MDS
 };
 
 enum e_char_ascii
@@ -323,6 +366,13 @@ struct s_exp_proc
 	t_token_types		token_type;
 };
 
+struct s_redir_proc
+{
+	t_redir_actions		redir_list_action;
+	t_redir_actions		token_action;
+	t_redir_read_modes	redir_read_mode;
+};
+
 struct s_lex
 {
 	char		*temp;
@@ -346,24 +396,29 @@ struct s_pars
 	int			start_std;
 	int			start_dol;
 	int			before_dol_mode;
+	int			hdoc;
 	char		*parser_text;
 	//int			nb_of_tokens;
 	//
-	t_pars_proc	prev_pars_decision;
-	t_pars_proc	new_pars_decision;
-	t_pars_proc	pars_decision[LEN_PARS_RD_MDS][LEN_TOKEN_TYPES];
-	t_exp_proc	prev_exp_decision;
-	t_exp_proc	new_exp_decision;
-	t_exp_proc	exp_decision[LEN_EXP_RD_MDS][LEN_CHAR_TYPES];
-	char		*token_types[LEN_TOKEN_TYPES];
-	t_pars_func	ft_pars[LEN_PARS_ACTIONS];
-	t_exp_func	ft_exp[LEN_EXP_ACTIONS];
-	t_command	*command;
-	int			nb_of_commands;
-	int			nb_of_tokens;
-	t_token		*token;
-	int			fd_in;
-	int			fd_out;
+	t_pars_proc		prev_pars_decision;
+	t_pars_proc		new_pars_decision;
+	t_pars_proc		pars_decision[LEN_PARS_RD_MDS][LEN_TOKEN_TYPES];
+	t_exp_proc		prev_exp_decision;
+	t_exp_proc		new_exp_decision;
+	t_exp_proc		exp_decision[LEN_EXP_RD_MDS][LEN_CHAR_TYPES];
+	t_redir_proc		prev_redir_decision;
+	t_redir_proc		new_redir_decision;
+	t_redir_proc	redir_decision[LEN_REDIR_RD_MDS][LEN_TOKEN_TYPES];
+	char			*token_types[LEN_TOKEN_TYPES];
+	t_pars_func		ft_pars[LEN_PARS_ACTIONS];
+	t_exp_func		ft_exp[LEN_EXP_ACTIONS];
+	t_redir_func	ft_redir[LEN_REDIR_ACTIONS];
+	t_command		*command;
+	int				nb_of_commands;
+	int				nb_of_tokens;
+	t_token			*token;
+	int				fd_in;
+	int				fd_out;
 };
 
 struct s_token
@@ -384,28 +439,56 @@ struct s_command
 };
 
 /* ************************************************************************** */
-/*                               lexparser_main.c                             */
+/*                                 common_main.c                              */
 /* ************************************************************************** */
 int				main(void);
 int				ft_read_prompt(void);
 int				ft_lexer(t_lex *lex);
 int				ft_parser(t_lex *lex, t_pars *pars);
 int				ft_expander(t_pars *pars);
+int				ft_redirector(t_pars *pars);
 int				ft_print_lexer_content(t_lex *lex);
 int				ft_print_parser_content(t_pars *pars);
 int				ft_print_expander_content(t_pars *pars);
+int				ft_print_redirector_content(t_pars *pars);
 
 /* ************************************************************************** */
-/*                           lexparser_initializations.c                      */
+/*                             common_initializations.c                       */
 /* ************************************************************************** */
-const char		*ft_getlabel_token_types(const t_token_types index);
-char		*ft_getlabel_err_msgs(const t_err_msgs msg);
+char			*ft_getlabel_err_msgs(const t_err_msgs msg);
 int				ft_init_lex_decisions(t_lex *lex);
 int				ft_init_pars_decisions(t_pars *pars);
 int				ft_init_exp_decisions(t_pars *pars);
+int				ft_init_redir_decisions(t_pars *pars);
 
 /* ************************************************************************** */
-/*                               memory.c                                     */
+/*                            redirection_heredoc.c                           */
+/* ************************************************************************** */
+int				ft_heredoc(char *argv);
+
+/* ************************************************************************** */
+/*                           redirection_file_manager.c                       */
+/* ************************************************************************** */
+int				ft_openinfile(t_pars *pars, char *file);
+int				ft_openoutfile(t_pars *pars, char *file);
+
+/* ************************************************************************** */
+/*                              common_labels.c                               */
+/* ************************************************************************** */
+const char		*ft_getlabel_error_msgs(const t_err_msgs index);
+const char		*ft_getlabel_token_types(const t_token_types index);
+const char		*ft_getlabel_char_types(const t_char_types index);
+const char		*ft_getlabel_lex_actions(const t_lex_actions index);
+const char		*ft_getlabel_pars_actions(const t_pars_actions index);
+const char		*ft_getlabel_exp_actions(const t_exp_actions index);
+const char		*ft_getlabel_redir_actions(const t_redir_actions index);
+const char		*ft_getlabel_lex_read_modes(const t_lex_read_modes index);
+const char		*ft_getlabel_pars_read_modes(const t_pars_read_modes index);
+const char		*ft_getlabel_exp_read_modes(const t_exp_read_modes index);
+const char		*ft_getlabel_redir_read_modes(const t_redir_read_modes index);
+
+/* ************************************************************************** */
+/*                           common_memory.c                                  */
 /* ************************************************************************** */
 void			ft_bzero(void *s, size_t n);
 int				ft_mallocator(void *ptr, size_t size);
@@ -413,7 +496,7 @@ int				ft_tklist_freeall(t_lex *lex);
 int				ft_cmdlist_freeall(t_pars *pars);
 
 /* ************************************************************************** */
-/*                             lexer_error.c                                  */
+/*                            common_error.c                                  */
 /* ************************************************************************** */
 int				ft_msgerr(char	*str);
 
@@ -467,7 +550,18 @@ int				ft_init_exp_decision_6(t_pars *pars);
 int				ft_init_exp_decision_7(t_pars *pars);
 
 /* ************************************************************************** */
-/*                         lexer_apply_decision.c                            */
+/*                     redirector_init_decisions.c                            */
+/* ************************************************************************** */
+int				ft_init_redir_decision_1(t_pars *pars);
+int				ft_init_redir_decision_2(t_pars *pars);
+int				ft_init_redir_decision_3(t_pars *pars);
+int				ft_init_redir_decision_4(t_pars *pars);
+int				ft_init_redir_decision_5(t_pars *pars);
+int				ft_init_redir_decision_6(t_pars *pars);
+int				ft_init_redir_decision_7(t_pars *pars);
+
+/* ************************************************************************** */
+/*                         lexer_apply_decision.c                             */
 /* ************************************************************************** */
 int				ft_lex_apply_decision(t_lex *lex);
 int				ft_print_lex_proc(t_lex_proc proc);
@@ -485,9 +579,16 @@ int				ft_exp_apply_decision(t_pars *pars);
 int				ft_print_exp_proc(t_exp_proc proc);
 
 /* ************************************************************************** */
+/*                       redirector_apply_decision.c                          */
+/* ************************************************************************** */
+int				ft_redir_apply_decision(t_pars *pars);
+int				ft_print_redir_proc(t_redir_proc proc);
+
+/* ************************************************************************** */
 /*                            lexer_actions.c                                 */
 /* ************************************************************************** */
 int				ft_init_lex_actions(t_lex *lex);
+int				ft_lex_none(t_lex *lex);
 int				ft_lex_catch(t_lex *lex);
 int				ft_lex_keep(t_lex *lex);
 int				ft_lex_drop(t_lex *lex);
@@ -495,12 +596,13 @@ int				ft_lex_take(t_lex *lex);
 int				ft_lex_skip(t_lex *lex);
 int				ft_lex_record(t_lex *lex);
 int				ft_lex_end(t_lex *lex);
-int				ft_lex_synt_err(t_lex *lex);
+int				ft_lex_err(t_lex *lex);
 
 /* ************************************************************************** */
-/*                            parser_actions.c                                 */
+/*                            parser_actions.c                                */
 /* ************************************************************************** */
 int				ft_init_pars_actions(t_pars *pars);
+int				ft_pars_none(t_pars *pars);
 int				ft_pars_new(t_pars *pars);
 int				ft_pars_catch(t_pars *pars);
 int				ft_pars_keep(t_pars *pars);
@@ -515,6 +617,7 @@ int				ft_pars_err(t_pars *pars);
 /*                           expander_actions.c                               */
 /* ************************************************************************** */
 int				ft_init_exp_actions(t_pars *pars);
+int				ft_exp_none(t_pars *pars);
 int				ft_exp_analysis(t_pars *pars);
 int				ft_exp_new(t_pars *pars);
 int				ft_exp_catch(t_pars *pars);
@@ -529,7 +632,22 @@ int				ft_exp_end(t_pars *pars);
 int				ft_exp_err(t_pars *pars);
 
 /* ************************************************************************** */
-/*                              lexer_utils.c                                 */
+/*                          redirector_actions.c                              */
+/* ************************************************************************** */
+int				ft_init_redir_actions(t_pars *pars);
+int				ft_redir_none(t_pars *pars);
+int				ft_redir_new(t_pars *pars);
+int				ft_redir_catch(t_pars *pars);
+int				ft_redir_keep(t_pars *pars);
+int				ft_redir_drop(t_pars *pars);
+int				ft_redir_take(t_pars *pars);
+int				ft_redir_skip(t_pars *pars);
+int				ft_redir_record(t_pars *pars);
+int				ft_redir_end(t_pars *pars);
+int				ft_redir_err(t_pars *pars);
+
+/* ************************************************************************** */
+/*                              common_utils.c                                */
 /* ************************************************************************** */
 size_t			ft_strlen(const char *s);
 char			*ft_strndup(const char *s, size_t n);
@@ -538,7 +656,7 @@ char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
 
 /* ************************************************************************** */
-/*                              lexer_ascii.c                                 */
+/*                             common_ascii.c                                 */
 /* ************************************************************************** */
 int				ft_char_type(char c);
 
