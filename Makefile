@@ -6,19 +6,21 @@
 #    By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 18:34:29 by mbourgeo          #+#    #+#              #
-#    Updated: 2022/10/06 23:02:57 by mbourgeo         ###   ########.fr        #
+#    Updated: 2022/10/07 23:28:53 by mbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_GOAL	=	all
 
 MD_SRCS	=	common_main.c common_initializations.c common_memory.c \
-				common_error.c common_labels.c \
-				common_utils.c common_ascii.c lexer_list.c parser_list.c\
+				common_error.c common_labels.c common_utils.c \
+				common_ascii.c common_debug.c \
+				lexer_list.c parser_list.c \
 				lexer_init_decisions.c lexer_apply_decision.c lexer_actions.c \
 				parser_init_decisions.c parser_apply_decision.c parser_actions.c \
-				expander_init_decisions.c expander_apply_decisions.c expander_actions.c\
-				redirector_init_decisions.c redirector_apply_decisions.c redirector_actions.c\
+				expander_init_decisions.c expander_apply_decisions.c expander_actions.c \
+				redirector_init_decisions.c redirector_apply_decisions.c redirector_actions.c \
+				redirector_file_manager.c
 #				parser_main.c parser_utils.c parser_ascii.c parser_memory.c parser_list.c \
 #				parser_actions.c parser_error.c parser_init_decisions.c parser_initializations.c \
 #				parser_apply_decision.c

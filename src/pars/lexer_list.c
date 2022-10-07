@@ -1,4 +1,4 @@
-/* ***********ll*************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   lexer_list.c                                       :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:22:22 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 10:47:12 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/07 18:28:43 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,4 +83,29 @@ int	ft_free_tokenlist(t_token *token)
 	temp = NULL;
 	token = NULL;
 	return (0);
+}
+
+t_token *ft_free_one_token(t_token *token)
+{
+	t_token	*temp;
+	t_token	*current;
+
+	if (!token)
+		return (NULL);
+	current = token;
+	//while (1)
+	//{
+	temp = current;
+	current = ft_token_jumpcurrent(current->prev, current->next);
+	//printf("\033[37;1mHello World!\033[0m\n");
+	free(temp->id);
+	temp->id = NULL;
+	free(temp);
+	//if (current == temp)
+	//	break ;
+	temp = NULL;
+	//}
+	//temp = NULL;
+	//token = NULL;
+	return (current);
 }

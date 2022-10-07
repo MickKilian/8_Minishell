@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/07 01:12:45 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 00:10:42 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 15:56:15 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -31,7 +31,8 @@
 # define ERR_SPL "Error! Simple quote is missing"
 # define ERR_DBL "Error! Double quote is missing"
 # define ERR_CASE "Error! Automate did not find current case"
-# define ERR_FILEHEREDOC "Error! Opening file fore heredoc"
+# define ERR_FILEHEREDOC "Error! Opening file for heredoc"
+# define ERR_FILEIN "Error! infile does not exist"
 # define ERR_FILEOUT "Error! Opening outfile for redirection"
 
 typedef struct s_lex			t_lex;
@@ -79,6 +80,7 @@ enum e_token_types
 	TOK_AMP,
 	TOK_OP_OR,
 	TOK_OP_AND,
+	TOK_ERR_MARK,
 	TOK_ERR_SPL,
 	TOK_ERR_DBL,
 	TOK_END_OF_INPUT,
@@ -156,6 +158,10 @@ enum e_redir_actions
 	REDIR_DROP,
 	REDIR_TAKE,
 	REDIR_SKIP,
+	REDIR_IN,
+	REDIR_OUT,
+	REDIR_OUT_APPEND,
+	REDIR_DEL_TWO,
 	REDIR_END,
 	LEN_REDIR_ACTIONS
 };
@@ -353,8 +359,8 @@ struct s_lex_proc
 
 struct s_pars_proc
 {
-	t_pars_actions		pars_list_action;
 	t_pars_actions		token_action;
+	t_pars_actions		pars_list_action;
 	t_pars_read_modes	pars_read_mode;
 };
 
@@ -368,8 +374,8 @@ struct s_exp_proc
 
 struct s_redir_proc
 {
-	t_redir_actions		redir_list_action;
 	t_redir_actions		token_action;
+	t_redir_actions		redir_list_action;
 	t_redir_read_modes	redir_read_mode;
 };
 
@@ -436,6 +442,8 @@ struct s_command
 	t_token			*token;
 	t_command		*prev;
 	t_command		*next;
+	int				fd_in;
+	int				fd_out;
 };
 
 /* ************************************************************************** */
@@ -462,17 +470,28 @@ int				ft_init_exp_decisions(t_pars *pars);
 int				ft_init_redir_decisions(t_pars *pars);
 int				ft_init_first_lex_decisions(t_lex *lex);
 int				ft_init_first_pars_decisions(t_pars *pars);
+int				ft_general_initialize(t_lex *lex, t_pars *pars);
 
 /* ************************************************************************** */
-/*                            redirection_heredoc.c                           */
+/*                               common_debug.c                               */
+/* ************************************************************************** */
+void			ft_flag(void);
+int				ft_print_debug_lex(t_lex *lex);
+int				ft_print_debug_pars(t_pars *pars);
+int				ft_print_debug_exp(t_pars *pars);
+int				ft_print_debug_redir(t_pars *pars);
+
+/* ************************************************************************** */
+/*                            redirector_heredoc.c                            */
 /* ************************************************************************** */
 int				ft_heredoc(char *argv);
 
 /* ************************************************************************** */
-/*                           redirection_file_manager.c                       */
+/*                           redirector_file_manager.c                        */
 /* ************************************************************************** */
-int				ft_openinfile(t_pars *pars, char *file);
-int				ft_openoutfile(t_pars *pars, char *file);
+int				ft_open_infile(t_pars *pars, char *file);
+int				ft_open_outfile(t_pars *pars, char *file);
+int				ft_open_append_outfile(t_pars *pars, char *file);
 
 /* ************************************************************************** */
 /*                              common_labels.c                               */
@@ -509,6 +528,7 @@ t_token			*ft_new_token(char *str);
 t_token			*ft_token_addnext(t_token *current, t_token *next);
 t_token			*ft_token_jumpcurrent(t_token *prev, t_token *next);
 int				ft_free_tokenlist(t_token *token);
+t_token 		*ft_free_one_token(t_token *token);
 
 /* ************************************************************************** */
 /*                           parser_list.c                                    */
@@ -566,25 +586,25 @@ int				ft_init_redir_decision_7(t_pars *pars);
 /*                         lexer_apply_decision.c                             */
 /* ************************************************************************** */
 int				ft_lex_apply_decision(t_lex *lex);
-int				ft_print_lex_proc(t_lex_proc proc);
+int				ft_print_debug_lex(t_lex *lex);
 
 /* ************************************************************************** */
 /*                         parser_apply_decision.c                            */
 /* ************************************************************************** */
 int				ft_pars_apply_decision(t_pars *pars);
-int				ft_print_pars_proc(t_pars_proc proc);
+int				ft_print_debug_pars(t_pars *pars);
 
 /* ************************************************************************** */
 /*                        expander_apply_decision.c                           */
 /* ************************************************************************** */
 int				ft_exp_apply_decision(t_pars *pars);
-int				ft_print_exp_proc(t_exp_proc proc);
+int				ft_print_debug_exp(t_pars *pars);
 
 /* ************************************************************************** */
 /*                       redirector_apply_decision.c                          */
 /* ************************************************************************** */
 int				ft_redir_apply_decision(t_pars *pars);
-int				ft_print_redir_proc(t_redir_proc proc);
+int				ft_print_debug_redir(t_pars *pars);
 
 /* ************************************************************************** */
 /*                            lexer_actions.c                                 */
@@ -645,6 +665,10 @@ int				ft_redir_drop(t_pars *pars);
 int				ft_redir_take(t_pars *pars);
 int				ft_redir_skip(t_pars *pars);
 int				ft_redir_record(t_pars *pars);
+int				ft_redir_in(t_pars *pars);
+int				ft_redir_out(t_pars *pars);
+int				ft_redir_out_append(t_pars *pars);
+int				ft_redir_del_two(t_pars *pars);
 int				ft_redir_end(t_pars *pars);
 int				ft_redir_err(t_pars *pars);
 

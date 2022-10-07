@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 22:46:09 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 00:10:58 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,10 @@ int	ft_init_redir_actions(t_pars *pars)
 	pars->ft_redir[REDIR_DROP] = ft_redir_drop;
 	pars->ft_redir[REDIR_TAKE] = ft_redir_take;
 	pars->ft_redir[REDIR_SKIP] = ft_redir_skip;
+	pars->ft_redir[REDIR_IN] = ft_redir_in;
+	pars->ft_redir[REDIR_OUT] = ft_redir_out;
+	pars->ft_redir[REDIR_OUT_APPEND] = ft_redir_out_append;
+	pars->ft_redir[REDIR_DEL_TWO] = ft_redir_del_two;
 	pars->ft_redir[REDIR_END] = ft_redir_end;
 	pars->ft_redir[REDIR_ERR] = ft_redir_err;
 	return (0);
@@ -37,6 +41,7 @@ int	ft_redir_new(t_pars *pars)
 {
 	int	id;
 
+	//printf("\033[1;36mI am here\n\033[0m");
 	id = 0;
 	//if (ft_mallocator(&pars->command, sizeof(t_command)))
 	//	return (0);
@@ -130,7 +135,7 @@ int	ft_redir_take(t_pars *pars)
 
 int	ft_redir_skip(t_pars *pars)
 {
-	//printf("\033[33;2min skip\033[0m\n");
+	//printf("\033[33;1min skip\033[0m\n");
 	pars->nb_of_tokens--;
 	pars->token = pars->token->next;
 	//printf("in ft_skip\n");
@@ -168,6 +173,96 @@ int	ft_redir_record(t_pars *pars)
 		pars->nb_taken_char = 0;
 	}
 	*/
+	return (0);
+}
+
+int	ft_redir_in(t_pars *pars)
+{
+	int	ret;
+
+	//printf("in redir_in");
+	ret = 0;
+	ret = ft_open_infile(pars, pars->command->token->next->id);
+	if (!ret)
+		pars->command->fd_in = pars->fd_in;
+	else
+		pars->command->fd_in = -1;
+	return (ret);
+}
+
+int	ft_redir_out(t_pars *pars)
+{
+	int	ret;
+
+	ret = 0;
+	ret = ft_open_outfile(pars, pars->command->token->next->id);
+	if (!ret)
+		pars->command->fd_out = pars->fd_out;
+	else
+		pars->command->fd_out = -1;
+	return (ret);
+}
+
+int	ft_redir_out_append(t_pars *pars)
+{
+	int	ret;
+
+	ret = 0;
+	ret = ft_open_append_outfile(pars, pars->command->token->next->id);
+	if (!ret)
+		pars->command->fd_out = pars->fd_out;
+	else
+		pars->command->fd_out = -1;
+	return (ret);
+}
+
+int	ft_redir_del_two(t_pars *pars)
+{
+	//printf("in redir_del_two\n");
+	//printf("pars->token->id : %s\n", pars->token->id);
+	//printf("pars->command->token->id : %s\n", pars->command->token->id);
+	//printf("pars->command->token->next->id : %s\n", pars->command->token->next->id);
+	//printf("pars->nb_of_tokens : %d\n", pars->nb_of_tokens);
+	//printf("pars->command->nb_of_tokens : %d\n", pars->command->nb_of_tokens);
+	//printf("check add : %p\n", pars->command->token);
+	//printf("check add : %s\n", pars->command->token->id);
+	//printf("check next : %p\n", pars->command->token->next);
+	//printf("check next : %s\n", pars->command->token->next->id);
+	//printf("check next : %p\n", pars->command->token->next->next);
+	//printf("check next : %s\n", pars->command->token->next->next->id);
+	//printf("check add : %p\n", pars->token);
+	//printf("check add : %s\n", pars->token->id);
+	//printf("check next : %p\n", pars->token->next);
+	//printf("check next : %s\n", pars->token->next->id);
+	//printf("check add : %p\n", pars->command->token->next);
+	//printf("check add : %s\n", pars->command->token->next->id);
+	//printf("check add : %p\n", pars->command->token->next->next);
+	//printf("check add : %s\n", pars->command->token->next->next->id);
+	pars->token = ft_free_one_token(pars->token);
+	//printf("check add : %p\n", pars->command->token);
+	//printf("check add : %s\n", pars->command->token->id);
+	//printf("check add i: %p\n", pars->token);
+	//printf("check add i: %s\n", pars->token->id);
+	//printf("check add i: %p\n", pars->token->next);
+	//printf("check add i: %s\n", pars->token->next->id);
+	//printf("\033[37;1mHello World!\033[0m\n");
+	pars->command->nb_of_tokens--;
+	pars->nb_of_tokens--;
+	//printf("pars->nb_of_tokens : %d\n", pars->nb_of_tokens);
+	//printf("pars->command->nb_of_tokens : %d\n", pars->command->nb_of_tokens);
+	//rintf("\033[37;1mHello World!\033[0m\n");
+	pars->token = ft_free_one_token(pars->token);
+	//printf("check add : %p\n", pars->command->token);
+	//printf("check add : %s\n", pars->command->token->id);
+	pars->command->nb_of_tokens--;
+	pars->nb_of_tokens--;
+	pars->token = pars->token->prev;
+	pars->command->token = pars->token;
+	//printf("pars->nb_of_tokens : %d\n", pars->nb_of_tokens);
+	//printf("pars->command->nb_of_tokens : %d\n", pars->command->nb_of_tokens);
+	//printf("check add : %p\n", pars->command->token);
+	//printf("check add : %s\n", pars->command->token->id);
+	//printf("\033[37;1mHello World!\033[0m\n");
 	return (0);
 }
 

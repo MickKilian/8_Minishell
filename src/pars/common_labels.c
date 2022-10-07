@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 18:18:49 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 23:08:33 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 00:09:26 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 const char	*ft_getlabel_error_msgs(const t_err_msgs index)
 {
 	static const char *label[LEN_ERR_MSGS] = {
-		"ERR_MSG_SPL", "ERR_MSG_DBL"
+		ERR_SPL, ERR_DBL
 	};
 	return (label[index]);
 }
@@ -25,7 +25,7 @@ const char	*ft_getlabel_token_types(const t_token_types index)
 	static const char *label[LEN_TOKEN_TYPES] = {
 		"TOK_NEW", "TOK_WORD", "TOK_NEW_LINE", "TOK_LSS", "TOK_GRT",
 		"TOK_GGRT", "TOK_HEREDOC", "TOK_PIPE", "TOK_AMP", "TOK_OP_OR", "TOK_OP_AND",
-		"TOK_ERR_SPL", "TOK_ERR_DBL", "TOK_END_OF_INPUT"
+		"TOK_ERR_MARK", "TOK_ERR_SPL", "TOK_ERR_DBL", "TOK_END_OF_INPUT"
 	};
 	return (label[index]);
 }
@@ -71,7 +71,7 @@ const char	*ft_getlabel_redir_actions(const t_redir_actions index)
 {
 	static const char* label[LEN_REDIR_ACTIONS] = {
 		"REDIR_NONE", "REDIR_NEW", "REDIR_CATCH", "REDIR_KEEP", "REDIR_DROP",
-		"REDIR_TAKE", "REDIR_SKIP", "REDIR_END"
+		"REDIR_TAKE", "REDIR_SKIP", "REDIR_IN", "REDIR_OUT", "REDIR_OUT_APPEND", "REDIR_DEL_TWO", "REDIR_END"
 	};
 	return (label[index]);
 }

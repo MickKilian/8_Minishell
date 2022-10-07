@@ -5,7 +5,7 @@ hello 'bonjour
 hello bonjour'
 hello "bonjour
 hello bonjour"
-'$USER'$USER
+
 < bonjour <bonjour bonjour< << bonjour <<bonjour bonjour<< > bonjour >bonjour bonjour> >> bonjour >>bonjour bonjour>>
 & bonjour &bonjour bonjour& && bonjour &&bonjour bonjour&& | |  bonjour |bonjour bonjour| || bonjour ||bonjour bonjour||
 ''
@@ -23,8 +23,14 @@ hello "bonjour'
 Ceci est un test
 bon nous allons recommencer un autre test | oui!!!! super on est contents
 
+'$USER'$USER "$USER"$USER $USER"$USER"
+"$USER     $USER    hello"$USER
+'$USER     $USER    hello'$USER
 $USER "name$USER name" "'name$USER name'" 'name$USER name' '"name$USER name"'
 $USERS "name$USERS name" "'name$USERS name'" 'name$USERS name' '"name$USERS name"'
+$USER$USER
+$USER$USER$USERS$USER
+"$USER$USER$USERS$USER bonjour"
 
 <<file_in cmd >>file_out
 << file_in cmd >> file_out
@@ -32,3 +38,10 @@ $USERS "name$USERS name" "'name$USERS name'" 'name$USERS name' '"name$USERS name
 <file_in cmd >file_out
 < file_in cmd > file_out
 <$FILE_IN cmd >$FILE_OUT
+
+<file_in cat >file_out
+< file_in cat > file_out
+<file_on cat >file_out
+cat >file_out
+
+<file_in "l"s -laho dir/ | wc -l

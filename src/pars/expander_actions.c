@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 16:01:37 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/07 23:57:33 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,6 @@ int	ft_exp_new(t_pars *pars)
 
 int	ft_exp_catch(t_pars *pars)
 {
-	//printf("in ft_catch\n");
 	//if (pars->token)
 	//	printf("\n\n*****current token is : %s\n", pars->token->id);
 	ft_exp_record(pars);
@@ -102,6 +101,13 @@ int	ft_exp_catch(t_pars *pars)
 		//printf("2-%s    %s\n", pars->temp, ft_getlabel_token_types(pars->token->type));
 		free(pars->temp);
 		pars->temp = NULL;
+	}
+	else
+	{
+		free(pars->token->id);
+		pars->token->id = NULL;
+		pars->token->id = ft_strndup("", 0);
+		pars->token->type =  pars->prev_exp_decision.token_type;
 	}
 	//printf("%s <%s>\n", pars->token->id, ft_getlabel_token_types(pars->token->type));
 	return (0);
@@ -183,6 +189,7 @@ int	ft_exp_record(t_pars *pars)
 			temp1 = ft_strndup(pars->temp, 0);
 			free(pars->temp);
 		}
+		//printf("check nb_taken_char : %d\n", pars->nb_taken_char);
 		temp2 = ft_substr(pars->parser_text - pars->offset_start, pars->start_std, pars->nb_taken_char);
 		pars->temp = ft_strjoin(temp1, temp2);
 		//printf("pars->temp : %s\n", pars->temp);
@@ -240,7 +247,7 @@ int	ft_exp_record_dol(t_pars *pars)
 			free(temp);
 		}
 		pars->temp = ft_strjoin(temp1, temp2);
-		printf("pars->temp : %s\n", pars->temp);
+		//printf("pars->temp : %s\n", pars->temp);
 		free(temp1);
 		free(temp2);
 		temp1 = NULL;
@@ -273,8 +280,13 @@ int	ft_exp_dol(t_pars *pars)
 		//printf("I am there now\n");
 		//printf("testing pars->temp : %s\n", pars->temp);
 		ft_exp_record_dol(pars);
-		pars->new_exp_decision.exp_read_mode = pars->before_dol_mode;
-		pars->before_dol_mode = 0;
+		if (pars->new_exp_decision.exp_read_mode == DOL_EXP_RD_MD)
+			pars->start_dol = pars->offset_start + 1;
+		else
+		{
+			pars->new_exp_decision.exp_read_mode = pars->before_dol_mode;
+			pars->before_dol_mode = 0;
+		}
 		//printf("test dol_mode : %d\n", pars->dol_mode);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 16:10:00 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/07 19:37:31 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	ft_init_lex_decision_2(t_lex *lex)
 	lex->decision[SPL_LEX_RD_MD][LT_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, SPL_LEX_RD_MD, TOK_WORD};
 	lex->decision[SPL_LEX_RD_MD][GT_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, SPL_LEX_RD_MD, TOK_WORD};
 	lex->decision[SPL_LEX_RD_MD][DOL_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, SPL_LEX_RD_MD, TOK_WORD};
-	lex->decision[SPL_LEX_RD_MD][END_CHAR] = (t_lex_proc){LEX_ERR, LEX_DROP, ERR_LEX_RD_MD, TOK_ERR_SPL};
+	lex->decision[SPL_LEX_RD_MD][END_CHAR] = (t_lex_proc){LEX_NONE, LEX_DROP, ERR_LEX_RD_MD, TOK_ERR_SPL};
 	lex->decision[DBL_LEX_RD_MD][SEP_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, DBL_LEX_RD_MD, TOK_WORD};
 	lex->decision[DBL_LEX_RD_MD][STD_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, DBL_LEX_RD_MD, TOK_WORD};
 	lex->decision[DBL_LEX_RD_MD][SPL_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, DBL_LEX_RD_MD, TOK_WORD};
@@ -62,7 +62,7 @@ int	ft_init_lex_decision_2(t_lex *lex)
 	lex->decision[DBL_LEX_RD_MD][LT_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, DBL_LEX_RD_MD, TOK_WORD};
 	lex->decision[DBL_LEX_RD_MD][GT_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, DBL_LEX_RD_MD, TOK_WORD};
 	lex->decision[DBL_LEX_RD_MD][DOL_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, DBL_LEX_RD_MD, TOK_WORD};
-	lex->decision[DBL_LEX_RD_MD][END_CHAR] = (t_lex_proc){LEX_ERR, LEX_SKIP, ERR_LEX_RD_MD, TOK_ERR_DBL};
+	lex->decision[DBL_LEX_RD_MD][END_CHAR] = (t_lex_proc){LEX_NONE, LEX_SKIP, ERR_LEX_RD_MD, TOK_ERR_DBL};
 	return (0);
 }
 

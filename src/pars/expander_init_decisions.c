@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 16:09:45 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/07 23:40:22 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_init_exp_decision_1(t_pars *pars)
 	pars->exp_decision[NEW_EXP_RD_MD][SPL_CHAR] = (t_exp_proc){EXP_KEEP, EXP_SKIP, SPL_EXP_RD_MD, TOK_WORD};
 	pars->exp_decision[NEW_EXP_RD_MD][DBL_CHAR] = (t_exp_proc){EXP_KEEP, EXP_SKIP, DBL_EXP_RD_MD, TOK_WORD};
 	pars->exp_decision[NEW_EXP_RD_MD][DOL_CHAR] = (t_exp_proc){EXP_DOL, EXP_SKIP, DOL_EXP_RD_MD, TOK_WORD};
-	pars->exp_decision[NEW_EXP_RD_MD][END_CHAR] = (t_exp_proc){EXP_ERR, EXP_SKIP, ERR_EXP_RD_MD, TOK_WORD};
+	pars->exp_decision[NEW_EXP_RD_MD][END_CHAR] = (t_exp_proc){EXP_NONE, EXP_SKIP, ERR_EXP_RD_MD, TOK_WORD};
 //	pars->exp_decision[NEW_EXP_RD_MD][TOK_WORD] = (t_exp_proc){EXP_ANALYSIS, EXP_TAKE, STD_EXP_RD_MD};
 //	pars->exp_decision[NEW_EXP_RD_MD][TOK_AMP] = (t_exp_proc){EXP_KEEP, EXP_TAKE, AMP_EXP_RD_MD};
 //	pars->exp_decision[NEW_EXP_RD_MD][TOK_LSS] = (t_exp_proc){EXP_KEEP, EXP_TAKE, LT_EXP_RD_MD};
@@ -48,7 +48,7 @@ int	ft_init_exp_decision_2(t_pars *pars)
 	pars->exp_decision[SPL_EXP_RD_MD][SPL_CHAR] = (t_exp_proc){EXP_REC, EXP_SKIP, STD_EXP_RD_MD, TOK_WORD};
 	pars->exp_decision[SPL_EXP_RD_MD][DBL_CHAR] = (t_exp_proc){EXP_KEEP, EXP_TAKE, SPL_EXP_RD_MD, TOK_WORD};
 	pars->exp_decision[SPL_EXP_RD_MD][DOL_CHAR] = (t_exp_proc){EXP_KEEP, EXP_TAKE, SPL_EXP_RD_MD, TOK_WORD};
-	pars->exp_decision[SPL_EXP_RD_MD][END_CHAR] = (t_exp_proc){EXP_ERR, EXP_SKIP, ERR_EXP_RD_MD, TOK_ERR_SPL};
+	pars->exp_decision[SPL_EXP_RD_MD][END_CHAR] = (t_exp_proc){EXP_NONE, EXP_SKIP, ERR_EXP_RD_MD, TOK_ERR_SPL};
 	pars->exp_decision[DBL_EXP_RD_MD][SEP_CHAR] = (t_exp_proc){EXP_KEEP, EXP_TAKE, DBL_EXP_RD_MD, TOK_WORD};
 	pars->exp_decision[DBL_EXP_RD_MD][STD_CHAR] = (t_exp_proc){EXP_KEEP, EXP_TAKE, DBL_EXP_RD_MD, TOK_WORD};
 	pars->exp_decision[DBL_EXP_RD_MD][SPL_CHAR] = (t_exp_proc){EXP_KEEP, EXP_TAKE, DBL_EXP_RD_MD, TOK_WORD};
@@ -70,9 +70,9 @@ int	ft_init_exp_decision_3(t_pars *pars)
 {
 	pars->exp_decision[DOL_EXP_RD_MD][SEP_CHAR] = (t_exp_proc){EXP_DOL, EXP_TAKE, NEW_EXP_RD_MD, TOK_WORD};
 	pars->exp_decision[DOL_EXP_RD_MD][STD_CHAR] = (t_exp_proc){EXP_KEEP, EXP_TAKE, DOL_EXP_RD_MD, TOK_WORD};
-	pars->exp_decision[DOL_EXP_RD_MD][SPL_CHAR] = (t_exp_proc){EXP_KEEP, EXP_TAKE, DOL_EXP_RD_MD, TOK_WORD};
-	pars->exp_decision[DOL_EXP_RD_MD][DBL_CHAR] = (t_exp_proc){EXP_KEEP, EXP_TAKE, DOL_EXP_RD_MD, TOK_WORD};
-	pars->exp_decision[DOL_EXP_RD_MD][DOL_CHAR] = (t_exp_proc){EXP_DOL, EXP_TAKE, DOL_EXP_RD_MD, TOK_WORD};
+	pars->exp_decision[DOL_EXP_RD_MD][SPL_CHAR] = (t_exp_proc){EXP_DOL, EXP_SKIP, SPL_EXP_RD_MD, TOK_WORD};
+	pars->exp_decision[DOL_EXP_RD_MD][DBL_CHAR] = (t_exp_proc){EXP_DOL, EXP_SKIP, DBL_EXP_RD_MD, TOK_WORD};
+	pars->exp_decision[DOL_EXP_RD_MD][DOL_CHAR] = (t_exp_proc){EXP_DOL, EXP_SKIP, DOL_EXP_RD_MD, TOK_WORD};
 	pars->exp_decision[DOL_EXP_RD_MD][END_CHAR] = (t_exp_proc){EXP_DOL, EXP_CATCH, NEW_EXP_RD_MD, TOK_WORD};
 /*	pars->exp_decision[ESCP_EXP_RD_MD][SEP_CHAR] = (t_exp_proc){EXP_KEEP, EXP_SKIP, NEW_EXP_RD_MD, TOK_NEW};
 	pars->exp_decision[ESCP_EXP_RD_MD][STD_CHAR] = (t_exp_proc){EXP_KEEP, EXP_TAKE, STD_EXP_RD_MD, TOK_WORD};
