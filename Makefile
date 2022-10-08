@@ -6,13 +6,13 @@
 #    By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 18:34:29 by mbourgeo          #+#    #+#              #
-#    Updated: 2022/10/08 04:38:11 by mbourgeo         ###   ########.fr        #
+#    Updated: 2022/10/08 22:53:54 by mbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .DEFAULT_GOAL	=	all
 
-MD_SRCS	=	common_main.c common_initializations.c common_memory.c \
+MD_SRCS	=	tests_main.c common_core.c common_initializations.c common_memory.c \
 				common_error.c common_labels.c common_utils.c \
 				common_ascii.c common_debug.c \
 				lexer_list.c parser_list.c \

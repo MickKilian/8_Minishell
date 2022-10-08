@@ -1,124 +1,66 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   common_main.c                                      :+:      :+:    :+:   */
+/*   common_core.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 15:37:24 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 22:56:26 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 16:01:12 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(void)
-{
-	if (ft_read_prompt())
-		return (1);
-	return (0);
-}
-
-int	ft_read_prompt(void)
+t_cmd	*ft_read_prompt(char *user_input)
 {
 	t_lex		lex;
 	t_pars		pars;
-	int			fd;
-	char		*temp;
 
-	//if (ft_mallocator(&lex, sizeof(t_lex)))
-	//	return (ft_msgerr(ERR_MALLOC), NULL);
 	ft_bzero(&lex, sizeof(t_lex));
 	ft_bzero(&pars, sizeof(t_pars));
 	ft_general_initialize(&lex, &pars);
-	//ft_init_token_types(&lex);
-	//temp = readline("$>");
-	fd = open("lexer.test", O_RDONLY, 644);
-	if (fd < 0)
-		return (ft_msgerr(ERR_TESTFILE), 1);
-	lex.user_input = get_next_line(fd);
-	temp = lex.user_input;
-	while (lex.user_input)
+	lex.user_input = user_input;
+	printf("\n--------------------------\n");
+	printf("\033[0;32m%s\033[0m", lex.user_input);
+	printf("--------------------------\n");
+	if (ft_lexer(&lex))
 	{
-		ft_general_initialize(&lex, &pars);
-		//printf("\033[1;37m___________________________\n\033[0m");
-		//printf("\n\033[1;35mpars->new_redir_decision\n\033[0m");
-		//ft_print_redir_proc(pars.new_redir_decision);
-		//printf("taken char : %d\n", lex.nb_taken_char);
-		printf("\n--------------------------\n");
-		printf("\033[0;32m%s\033[0m", lex.user_input);
-		printf("--------------------------\n");
-		//if (ft_mallocator(&lex.user_input, ft_strlen(temp) * sizeof(char)))
-		//	return (ft_msgerr(ERR_MALLOC), 1);
-		//lex.user_input = temp;
-		if (ft_lexer(&lex))
-		{
-			//printf("error herehere\n");
-			//ft_tklist_freeall(&lex);
-			//printf("err : %d, %d\n", lex.new_decision.token_type, TOK_ERR_MARK);
-			ft_free_tokenlist(lex.token);
-			//printf("err : %d, %d\n", lex.new_decision.token_type, TOK_ERR_MARK);
-			lex.token = NULL;
-			lex.temp = ft_strndup("", 0);
-			lex.token = ft_token_addnext(lex.token, ft_new_token(lex.temp));
-			lex.nb_of_tokens = 1;
-			//printf("check err : %d\n", lex.new_decision.token_type);
-			lex.token->type = lex.new_decision.token_type;
-			//printf("err : %d, %d\n", lex.token->type, TOK_ERR_MARK);
-			free(lex.temp);
-			lex.temp = NULL;
-		}
-		//printf("came back\n");
-		//printf("check reading mode : %d\n", lex.new_decision.lex_read_mode);
-		//if (lex.new_decision.lex_read_mode != SYNT_ERR_LEX_RD_MD)
-		ft_print_lexer_content(&lex);
-		//printf("\033[37;1mHello World!\033[0m\n");
-		pars.nb_of_commands = 0;
-		pars.nb_of_tokens = lex.nb_of_tokens;
-		if (ft_parser(&lex, &pars))
-		{
-			ft_tklist_freeall(&lex);
-			free(temp);
-			temp = NULL;
-			ft_cmdlist_freeall(&pars);
-			break ;
-		}
+		ft_free_tokenlist(lex.token);
+		lex.token = NULL;
+		lex.temp = ft_strndup("", 0);
+		lex.token = ft_token_addnext(lex.token, ft_new_token(lex.temp));
+		lex.nb_of_tokens = 1;
+		lex.token->type = lex.new_decision.token_type;
+		free(lex.temp);
+		lex.temp = NULL;
+	}
+	ft_print_lexer_content(&lex);
+	pars.nb_of_commands = 0;
+	pars.nb_of_tokens = lex.nb_of_tokens;
+	if (ft_parser(&lex, &pars))
+	{
 		ft_tklist_freeall(&lex);
-		free(temp);
-		temp = NULL;
-		ft_print_parser_content(&pars);
-		ft_expander(&pars);
-		ft_print_expander_content(&pars);
-		//ft_redirector(&pars);
-		if (ft_redirector(&pars))
-		{
-			ft_tklist_freeall(&lex);
-			free(temp);
-			temp = NULL;
-			ft_cmdlist_freeall(&pars);
-			break ;
-		}
-		ft_print_redirector_content(&pars);
-		ft_transformer(&pars);
-		pars.cmd = pars.cmd_head;
-		ft_print_transformer_content(pars.cmd);
 		ft_cmdlist_freeall(&pars);
-		//ft_bzero(&(lex.prev_decision), sizeof(t_lex_proc));
-		//ft_bzero(&(lex.new_decision), sizeof(t_lex_proc));
-		lex.user_input = get_next_line(fd);
-		temp = lex.user_input;
+		return (NULL);
 	}
-	//printf("here\n");
-	if (temp)
+	ft_tklist_freeall(&lex);
+	ft_print_parser_content(&pars);
+	ft_expander(&pars);
+	ft_print_expander_content(&pars);
+	if (ft_redirector(&pars))
 	{
-		free(temp);
-		temp = NULL;
+		ft_tklist_freeall(&lex);
+		ft_cmdlist_freeall(&pars);
+		return (NULL);
 	}
-	//printf("here\n");
-	//ft_freeall(&lex);
-	close(fd);
-	return (0);
+	ft_print_redirector_content(&pars);
+	ft_transformer(&pars);
+	pars.cmd = pars.cmd_head;
+	ft_print_transformer_content(pars.cmd);
+	ft_cmdlist_freeall(&pars);
+	return (pars.cmd);
 }
 
 int	ft_lexer(t_lex *lex)
