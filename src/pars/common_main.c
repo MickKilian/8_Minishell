@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 03:50:58 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 06:41:58 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 16:01:12 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -24,6 +24,7 @@ int	ft_read_prompt(void)
 {
 	t_lex		lex;
 	t_pars		pars;
+	t_cmd		cmd;
 	int			fd;
 	char		*temp;
 
@@ -100,7 +101,11 @@ int	ft_read_prompt(void)
 			break ;
 		}
 		ft_print_redirector_content(&pars);
+		ft_transformer(&pars, &cmd);
+		//printf("test : %s\n", (cmd.token)[0]);
+		ft_print_transformer_content(&cmd);
 		ft_cmdlist_freeall(&pars);
+		ft_free_cmdlist(&cmd);
 		//ft_bzero(&(lex.prev_decision), sizeof(t_lex_proc));
 		//ft_bzero(&(lex.new_decision), sizeof(t_lex_proc));
 		lex.user_input = get_next_line(fd);
@@ -258,9 +263,12 @@ int	ft_redirector(t_pars *pars)
 {
 	int		i;
 	int		j;
+	int		k;
+	int		count;
 
 	i = 0;
 	j = 0;
+	count = 0;
 	ft_init_redir_decisions(pars);
 	ft_init_redir_actions(pars);
 	//printf("\nin redirector\n");
@@ -269,7 +277,8 @@ int	ft_redirector(t_pars *pars)
 	//printf("nb_of_tokens in command : %d\n", pars->command->nb_of_tokens);
 	while (i++ < pars->nb_of_commands)
 	{
-		while (j++ < pars->command->nb_of_tokens)
+		k = pars->command->nb_of_tokens;
+		while (j++ < k)
 		{
 			pars->token = pars->command->token;
 			//printf("new token : %s\n", pars->token->id);
@@ -283,10 +292,30 @@ int	ft_redirector(t_pars *pars)
 			//}
 			pars->command->token = pars->command->token->next;
 		}
-		pars->command->nb_of_tokens = pars->nb_of_tokens;
 		pars->command = pars->command->next;
+		count += pars->command->nb_of_tokens;
 		j = 0;
 	}
+	return (0);
+}
+
+int	ft_transformer(t_pars *pars, t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (i++ < pars->nb_of_commands)
+	{
+		cmd = ft_cmd_addnext(cmd, ft_new_cmd(ft_token_list_to_tab(pars->command)));
+		cmd->id = pars->command->id;
+		printf("test %d\n", cmd->id);
+		printf("test %d\n", cmd->prev->id);
+		cmd->nb_of_tokens = pars->command->nb_of_tokens;
+		cmd->fd_in = pars->command->fd_in;
+		cmd->fd_out = pars->command->fd_out;
+		pars->command = pars->command->next;
+	}
+	cmd = cmd->prev->prev;
 	return (0);
 }
 
@@ -396,6 +425,28 @@ int	ft_print_redirector_content(t_pars *pars)
 		//printf("just stopped on token : %s\n", pars->command->token->id);
 		pars->command = pars->command->next;
 		j = 0;
+	}
+	printf("\033[0m");
+	printf("\n");
+	return (0);
+}
+
+int	ft_print_transformer_content(t_cmd *cmd)
+{
+	int	i;
+
+	i = 0;
+	printf("\nTRANSFORMER CONTENT\n");
+	while (cmd)
+	{
+		printf("------> starting command id <\033[0;31m%d\033[0m> <in \033[0;32m%d\033[0m> <out \033[0;32m%d\033[0m>\n", cmd->id,
+				cmd->fd_in, cmd->fd_out);
+		while (i++ < cmd->nb_of_tokens)
+		{
+			printf("\033[0;31m%s\033[0m\n", cmd->token[i]);
+		}
+		//printf("just stopped on token : %s\n", pars->command->token->id);
+		cmd = cmd->next;
 	}
 	printf("\033[0m");
 	printf("\n");

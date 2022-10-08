@@ -6,7 +6,7 @@
 #    By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/06 18:34:29 by mbourgeo          #+#    #+#              #
-#    Updated: 2022/10/08 00:42:04 by mbourgeo         ###   ########.fr        #
+#    Updated: 2022/10/08 04:38:11 by mbourgeo         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,10 +20,8 @@ MD_SRCS	=	common_main.c common_initializations.c common_memory.c \
 				parser_init_decisions.c parser_apply_decision.c parser_actions.c \
 				expander_init_decisions.c expander_apply_decisions.c expander_actions.c \
 				redirector_init_decisions.c redirector_apply_decisions.c redirector_actions.c \
-				redirector_file_manager.c redirector_heredoc.c
-#				parser_main.c parser_utils.c parser_ascii.c parser_memory.c parser_list.c \
-#				parser_actions.c parser_error.c parser_init_decisions.c parser_initializations.c \
-#				parser_apply_decision.c
+				redirector_file_manager.c redirector_heredoc.c \
+				transformer_list.c
 MD_SRCDIR	=	src/pars
 MD_PATH	=	$(addprefix $(MD_SRCDIR)/, $(MD_SRCS))
 MD_OBJDIR	=	obj

@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 03:30:19 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 06:39:34 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,9 +181,9 @@ int	ft_redir_del_two(t_pars *pars)
 {
 	//printf("in redir_del_two\n");
 	pars->token = ft_free_one_token(pars->token);
-	pars->nb_of_tokens--;
+	pars->command->nb_of_tokens--;
 	pars->token = ft_free_one_token(pars->token);
-	pars->nb_of_tokens--;
+	pars->command->nb_of_tokens--;
 	pars->token = pars->token->prev;
 	pars->command->token = pars->token;
 	return (0);

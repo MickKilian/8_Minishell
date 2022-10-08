@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 04:04:24 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 05:31:32 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 15:56:15 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -435,8 +435,9 @@ struct s_pars
 
 struct s_cmd
 {
-	int				total_count;
-	char			**tokens;
+	int				id;
+	int				nb_of_tokens;
+	char			**token;
 	int				fd_in;
 	int				fd_out;
 	t_cmd			*prev;
@@ -479,10 +480,12 @@ int				ft_lexer(t_lex *lex);
 int				ft_parser(t_lex *lex, t_pars *pars);
 int				ft_expander(t_pars *pars);
 int				ft_redirector(t_pars *pars);
+int				ft_transformer(t_pars *pars, t_cmd *cmd);
 int				ft_print_lexer_content(t_lex *lex);
 int				ft_print_parser_content(t_pars *pars);
 int				ft_print_expander_content(t_pars *pars);
 int				ft_print_redirector_content(t_pars *pars);
+int				ft_print_transformer_content(t_cmd *cmd);
 
 /* ************************************************************************** */
 /*                             common_initializations.c                       */
@@ -719,5 +722,14 @@ char			*ft_itoa(int n);
 /*                             common_ascii.c                                 */
 /* ************************************************************************** */
 int				ft_char_type(char c);
+
+/* ************************************************************************** */
+/*                           transformer_list.c                               */
+/* ************************************************************************** */
+t_cmd			*ft_new_cmd(char **token);
+t_cmd			*ft_cmd_addnext(t_cmd *current, t_cmd *next);
+int				ft_free_cmdlist(t_cmd *cmd);
+char			**ft_token_list_to_tab(t_command *command);
+int				ft_free_token(char **token, int len);
 
 #endif
