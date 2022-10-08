@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 00:16:41 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 00:38:54 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,13 @@
 
 int	ft_open_infile(t_pars *pars, char *file)
 {
-	if (pars->hdoc)
-	{
-	//	ft_heredoc(file);
-	//	pars->fd_in = open(".heredoc_tmp", O_RDWR);
-	//	if (pars->fd_in < 0)
-	//	{
-	//		unlink(".heredoc_tmp");
-	//		return (ft_msgerr(ERR_FILEHEREDOC));
-	//	}
-	}
-	else
-	{
-		pars->fd_in = open(file, O_RDWR);
-	}
+	pars->fd_in = open(file, O_RDWR);
 	if (pars->fd_in < 0)
 	{
 		//perror(file);
 		//return (1);
 		return (ft_msgerr(ERR_FILEIN));
 	}
-	//printf("fd_in = %d\n", pars->fd_in);
 	return (0);
 }
 
@@ -48,7 +34,6 @@ int	ft_open_outfile(t_pars *pars, char *file)
 		//return (1);
 		return (ft_msgerr(ERR_FILEOUT));
 	}
-	//printf("fd_out = %d\n", pars->fd_out);
 	return (0);
 }
 
@@ -62,6 +47,5 @@ int	ft_open_append_outfile(t_pars *pars, char *file)
 		//return (1);
 		return (ft_msgerr(ERR_FILEOUT));
 	}
-	//printf("fd_out = %d\n", pars->fd_out);
 	return (0);
 }

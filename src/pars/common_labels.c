@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 18:18:49 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 00:09:26 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 02:50:14 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ const char	*ft_getlabel_token_types(const t_token_types index)
 {
 	static const char *label[LEN_TOKEN_TYPES] = {
 		"TOK_NEW", "TOK_WORD", "TOK_NEW_LINE", "TOK_LSS", "TOK_GRT",
-		"TOK_GGRT", "TOK_HEREDOC", "TOK_PIPE", "TOK_AMP", "TOK_OP_OR", "TOK_OP_AND",
+		"TOK_GGRT", "TOK_HDOC", "TOK_PIPE", "TOK_AMP", "TOK_OP_OR", "TOK_OP_AND",
 		"TOK_ERR_MARK", "TOK_ERR_SPL", "TOK_ERR_DBL", "TOK_END_OF_INPUT"
 	};
 	return (label[index]);
@@ -70,8 +70,9 @@ const char	*ft_getlabel_exp_actions(const t_exp_actions index)
 const char	*ft_getlabel_redir_actions(const t_redir_actions index)
 {
 	static const char* label[LEN_REDIR_ACTIONS] = {
-		"REDIR_NONE", "REDIR_NEW", "REDIR_CATCH", "REDIR_KEEP", "REDIR_DROP",
-		"REDIR_TAKE", "REDIR_SKIP", "REDIR_IN", "REDIR_OUT", "REDIR_OUT_APPEND", "REDIR_DEL_TWO", "REDIR_END"
+		"REDIR_ERR", "REDIR_NONE", "REDIR_NEW", "REDIR_CATCH", "REDIR_KEEP", "REDIR_DROP",
+		"REDIR_TAKE", "REDIR_SKIP", "REDIR_IN", "REDIR_HDOC", "REDIR_HDOC_APPEND", "REDIR_OUT",
+		"REDIR_OUT_APPEND", "REDIR_DEL_TWO", "REDIR_END"
 	};
 	return (label[index]);
 }
@@ -81,7 +82,7 @@ const char	*ft_getlabel_lex_read_modes(const t_lex_read_modes index)
 	static const char* label[LEN_LEX_RD_MDS] = {
 		"ERR_LEX_RD_MD", "NEW_LEX_RD_MD", "STD_LEX_RD_MD", "SPL_LEX_RD_MD",
 		"DBL_LEX_RD_MD", "ESCP_LEX_RD_MD", "PIPE_LEX_RD_MD", "AMP_LEX_RD_MD", "LT_LEX_RD_MD",
-		"GT_LEX_RD_MD", "OR_LEX_RD_MD", "AND_LEX_RD_MD", "HEREDOC_LEX_RD_MD", "GGRT_LEX_RD_MD"
+		"GT_LEX_RD_MD", "OR_LEX_RD_MD", "AND_LEX_RD_MD", "HDOC_LEX_RD_MD", "GGRT_LEX_RD_MD"
 	};
 	return (label[index]);
 }
@@ -91,7 +92,7 @@ const char	*ft_getlabel_pars_read_modes(const t_pars_read_modes index)
 	static const char* label[LEN_PARS_RD_MDS] = {
 		"ERR_PARS_RD_MD", "NEW_PARS_RD_MD", "STD_PARS_RD_MD", "SPL_PARS_RD_MD",
 		"DBL_PARS_RD_MD", "ESCP_PARS_RD_MD", "PIPE_PARS_RD_MD", "AMP_PARS_RD_MD", "LT_PARS_RD_MD",
-		"GT_PARS_RD_MD", "OR_PARS_RD_MD" ,"AND_PARS_RD_MD", "HEREDOC_PARS_RD_MD", "GGRT_PARS_RD_MD"
+		"GT_PARS_RD_MD", "OR_PARS_RD_MD" ,"AND_PARS_RD_MD", "HDOC_PARS_RD_MD", "GGRT_PARS_RD_MD"
 	};
 	return (label[index]);
 }
@@ -101,7 +102,7 @@ const char	*ft_getlabel_exp_read_modes(const t_exp_read_modes index)
 	static const char* label[LEN_EXP_RD_MDS] = {
 		"ERR_EXP_RD_MD", "NEW_EXP_RD_MD", "STD_EXP_RD_MD", "SPL_EXP_RD_MD",
 		"DBL_EXP_RD_MD", "ESCP_EXP_RD_MD", "PIPE_EXP_RD_MD", "AMP_EXP_RD_MD", "LT_EXP_RD_MD",
-		"GT_EXP_RD_MD", "OR_EXP_RD_MD", "AND_EXP_RD_MD", "HEREDOC_EXP_RD_MD", "GGRT_EXP_RD_MD",
+		"GT_EXP_RD_MD", "OR_EXP_RD_MD", "AND_EXP_RD_MD", "HDOC_EXP_RD_MD", "GGRT_EXP_RD_MD",
 		"DOL_EXP_RD_MD"
 	};
 	return (label[index]);
@@ -112,7 +113,7 @@ const char	*ft_getlabel_redir_read_modes(const t_redir_read_modes index)
 	static const char* label[LEN_REDIR_RD_MDS] = {
 		"ERR_REDIR_RD_MD", "NEW_REDIR_RD_MD", "STD_REDIR_RD_MD", "SPL_REDIR_RD_MD",
 		"DBL_REDIR_RD_MD", "ESCP_REDIR_RD_MD", "PIPE_REDIR_RD_MD", "AMP_REDIR_RD_MD", "LT_REDIR_RD_MD",
-		"GT_REDIR_RD_MD", "OR_REDIR_RD_MD" ,"AND_REDIR_RD_MD", "HEREDOC_REDIR_RD_MD", "GGRT_REDIR_RD_MD"
+		"GT_REDIR_RD_MD", "OR_REDIR_RD_MD" ,"AND_REDIR_RD_MD", "HDOC_REDIR_RD_MD", "GGRT_REDIR_RD_MD"
 	};
 	return (label[index]);
 }

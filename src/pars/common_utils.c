@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/06 22:17:29 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 01:09:00 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,24 @@ size_t	ft_strlen(const char *s)
 	while (s[i])
 		i++;
 	return (i);
+}
+
+char	*ft_strdup(const char *s)
+{
+	char	*cpy;
+	int		i;
+
+	cpy = malloc((ft_strlen(s) + 1) * sizeof(char));
+	if (!cpy)
+		return (NULL);
+	i = 0;
+	while (*(s + i))
+	{
+		*(cpy + i) = *(s + i);
+		i++;
+	}
+	*(cpy + i) = '\0';
+	return (cpy);
 }
 
 char	*ft_strndup(const char *s, size_t n)
@@ -105,4 +123,52 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 		*str++ = *(s++ + start);
 	*str = '\0';
 	return (str - length);
+}
+
+int	ft_getsize(int n)
+{
+	int	size;
+
+	size = 0;
+	if (n == -2147483648)
+		return (11);
+	else if (n < 0)
+	{
+		size++;
+		n = -n;
+	}
+	else if (n == 0)
+		return (1);
+	while (n)
+	{
+		size++;
+		n = n / 10;
+	}
+	return (size);
+}
+
+char	*ft_itoa(int n)
+{
+	int		sign;
+	int		nb_carac;
+	char	*str;
+
+	nb_carac = ft_getsize(n);
+	if (n == -2147483648)
+		return (ft_strdup("-2147483648"));
+	str = malloc((nb_carac + 1) * sizeof(char));
+	if (!str)
+		return (NULL);
+	sign = (n < 0);
+	n = n - 2 * n * (n < 0);
+	if (sign == 1)
+		str[0] = '-';
+	str[nb_carac] = '\0';
+	while (nb_carac - sign)
+	{
+		str[nb_carac - 1] = n % 10 + '0';
+		n = n / 10;
+		nb_carac--;
+	}
+	return (str);
 }
