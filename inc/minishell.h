@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 00:10:42 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 04:04:24 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 15:56:15 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -23,15 +23,16 @@
 # include "get_next_line.h"
 
 # define ERR_MALLOC "Error! Malloc"
-# define ERR_NULLTKN "Error! Mew TOKEN is NULL in list"
+# define ERR_NULLTKN "Error! New TOKEN is NULL in list"
 # define ERR_NULLCMD "Error! New CMD is NULL in list"
+# define ERR_NULLHDOC "Error! New HDOC is NULL in list"
 # define ERR_SYNTAX "Error! Syntax"
 # define ERR_STRNULL "Error! String is NULL"
 # define ERR_TESTFILE "Error! Reading file lexer.test"
 # define ERR_SPL "Error! Simple quote is missing"
 # define ERR_DBL "Error! Double quote is missing"
 # define ERR_CASE "Error! Automate did not find current case"
-# define ERR_FILEHEREDOC "Error! Opening file for heredoc"
+# define ERR_FILEHDOC "Error! Opening file for heredoc"
 # define ERR_FILEIN "Error! infile does not exist"
 # define ERR_FILEOUT "Error! Opening outfile for redirection"
 
@@ -43,6 +44,8 @@ typedef struct s_lex_proc		t_lex_proc;
 typedef struct s_pars_proc		t_pars_proc;
 typedef struct s_exp_proc		t_exp_proc;
 typedef struct s_redir_proc		t_redir_proc;
+typedef struct s_hdoc			t_hdoc;
+typedef struct s_cmd			t_cmd;
 typedef enum e_char_ascii		t_char_ascii;
 typedef enum e_char_types		t_char_types;
 typedef enum e_lex_read_modes	t_lex_read_modes;
@@ -75,7 +78,7 @@ enum e_token_types
 	TOK_LSS,
 	TOK_GRT,
 	TOK_GGRT,
-	TOK_HEREDOC,
+	TOK_HDOC,
 	TOK_PIPE,
 	TOK_AMP,
 	TOK_OP_OR,
@@ -159,6 +162,8 @@ enum e_redir_actions
 	REDIR_TAKE,
 	REDIR_SKIP,
 	REDIR_IN,
+	REDIR_HDOC,
+	REDIR_HDOC_APPEND,
 	REDIR_OUT,
 	REDIR_OUT_APPEND,
 	REDIR_DEL_TWO,
@@ -180,7 +185,7 @@ enum e_lex_read_modes
 	GT_LEX_RD_MD,
 	OR_LEX_RD_MD,
 	AND_LEX_RD_MD,
-	HEREDOC_LEX_RD_MD,
+	HDOC_LEX_RD_MD,
 	GGRT_LEX_RD_MD,
 	LEN_LEX_RD_MDS
 };
@@ -199,7 +204,7 @@ enum e_pars_read_modes
 	GT_PARS_RD_MD,
 	OR_PARS_RD_MD,
 	AND_PARS_RD_MD,
-	HEREDOC_PARS_RD_MD,
+	HDOC_PARS_RD_MD,
 	GGRT_PARS_RD_MD,
 	LEN_PARS_RD_MDS
 };
@@ -218,7 +223,7 @@ enum e_exp_read_modes
 	GT_EXP_RD_MD,
 	OR_EXP_RD_MD,
 	AND_EXP_RD_MD,
-	HEREDOC_EXP_RD_MD,
+	HDOC_EXP_RD_MD,
 	GGRT_EXP_RD_MD,
 	DOL_EXP_RD_MD,
 	LEN_EXP_RD_MDS
@@ -238,7 +243,7 @@ enum e_redir_read_modes
 	GT_REDIR_RD_MD,
 	OR_REDIR_RD_MD,
 	AND_REDIR_RD_MD,
-	HEREDOC_REDIR_RD_MD,
+	HDOC_REDIR_RD_MD,
 	GGRT_REDIR_RD_MD,
 	LEN_REDIR_RD_MDS
 };
@@ -402,7 +407,8 @@ struct s_pars
 	int			start_std;
 	int			start_dol;
 	int			before_dol_mode;
-	int			hdoc;
+	int			hdoc_i;
+	t_hdoc		*hdoc_list;
 	char		*parser_text;
 	//int			nb_of_tokens;
 	//
@@ -427,6 +433,16 @@ struct s_pars
 	int				fd_out;
 };
 
+struct s_cmd
+{
+	int				total_count;
+	char			**tokens;
+	int				fd_in;
+	int				fd_out;
+	t_cmd			*prev;
+	t_cmd			*next;
+};
+
 struct s_token
 {
 	char			*id;
@@ -444,6 +460,14 @@ struct s_command
 	t_command		*next;
 	int				fd_in;
 	int				fd_out;
+};
+
+struct s_hdoc
+{
+	char			*file_name;
+	int				fd;
+	t_hdoc			*prev;
+	t_hdoc			*next;
 };
 
 /* ************************************************************************** */
@@ -484,7 +508,12 @@ int				ft_print_debug_redir(t_pars *pars);
 /* ************************************************************************** */
 /*                            redirector_heredoc.c                            */
 /* ************************************************************************** */
-int				ft_heredoc(char *argv);
+int				ft_open_heredoc(t_pars *pars, char *delim);
+int				ft_heredoc_append(t_pars *pars, char *delim);
+t_hdoc			*ft_new_hdoc(char *str, int fd);
+t_hdoc			*ft_hdoc_addnext(t_hdoc *current, t_hdoc *next);
+t_hdoc			*ft_hdoc_jumpcurrent(t_hdoc *prev, t_hdoc *next);
+int				ft_free_hdoclist(t_hdoc *hdoc);
 
 /* ************************************************************************** */
 /*                           redirector_file_manager.c                        */
@@ -666,6 +695,8 @@ int				ft_redir_take(t_pars *pars);
 int				ft_redir_skip(t_pars *pars);
 int				ft_redir_record(t_pars *pars);
 int				ft_redir_in(t_pars *pars);
+int				ft_redir_heredoc(t_pars *pars);
+int				ft_redir_heredoc_append(t_pars *pars);
 int				ft_redir_out(t_pars *pars);
 int				ft_redir_out_append(t_pars *pars);
 int				ft_redir_del_two(t_pars *pars);
@@ -676,10 +707,13 @@ int				ft_redir_err(t_pars *pars);
 /*                              common_utils.c                                */
 /* ************************************************************************** */
 size_t			ft_strlen(const char *s);
+char			*ft_strdup(const char *s);
 char			*ft_strndup(const char *s, size_t n);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
 char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
+int				ft_getsize(int n);
+char			*ft_itoa(int n);
 
 /* ************************************************************************** */
 /*                             common_ascii.c                                 */

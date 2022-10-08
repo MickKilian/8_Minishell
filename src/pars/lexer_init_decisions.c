@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/07 19:37:31 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 02:18:53 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ int	ft_init_lex_decision_4(t_lex *lex)
 	lex->decision[LT_LEX_RD_MD][ESCP_CHAR] = (t_lex_proc){LEX_CATCH, LEX_SKIP, ESCP_LEX_RD_MD, TOK_NEW};
 	lex->decision[LT_LEX_RD_MD][PIPE_CHAR] = (t_lex_proc){LEX_DROP, LEX_SKIP, ERR_LEX_RD_MD, TOK_NEW};
 	lex->decision[LT_LEX_RD_MD][AMP_CHAR] = (t_lex_proc){LEX_DROP, LEX_SKIP, ERR_LEX_RD_MD, TOK_NEW};
-	lex->decision[LT_LEX_RD_MD][LT_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, HEREDOC_LEX_RD_MD, TOK_HEREDOC};
+	lex->decision[LT_LEX_RD_MD][LT_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, HDOC_LEX_RD_MD, TOK_HDOC};
 	lex->decision[LT_LEX_RD_MD][GT_CHAR] = (t_lex_proc){LEX_DROP, LEX_SKIP, ERR_LEX_RD_MD, TOK_WORD};
 	lex->decision[LT_LEX_RD_MD][DOL_CHAR] = (t_lex_proc){LEX_CATCH, LEX_TAKE, STD_LEX_RD_MD, TOK_WORD};
 	lex->decision[LT_LEX_RD_MD][END_CHAR] = (t_lex_proc){LEX_CATCH, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
@@ -158,21 +158,21 @@ int	ft_init_lex_decision_6(t_lex *lex)
 	lex->decision[AND_LEX_RD_MD][ESCP_CHAR] = (t_lex_proc){LEX_CATCH, LEX_SKIP, ESCP_LEX_RD_MD, TOK_NEW};
 	lex->decision[AND_LEX_RD_MD][PIPE_CHAR] = (t_lex_proc){LEX_DROP, LEX_SKIP, ERR_LEX_RD_MD, TOK_NEW};
 	lex->decision[AND_LEX_RD_MD][AMP_CHAR] = (t_lex_proc){LEX_DROP, LEX_SKIP, ERR_LEX_RD_MD, TOK_NEW};
-	lex->decision[AND_LEX_RD_MD][LT_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, HEREDOC_LEX_RD_MD, TOK_HEREDOC};
+	lex->decision[AND_LEX_RD_MD][LT_CHAR] = (t_lex_proc){LEX_KEEP, LEX_TAKE, HDOC_LEX_RD_MD, TOK_HDOC};
 	lex->decision[AND_LEX_RD_MD][GT_CHAR] = (t_lex_proc){LEX_DROP, LEX_SKIP, ERR_LEX_RD_MD, TOK_WORD};
 	lex->decision[AND_LEX_RD_MD][DOL_CHAR] = (t_lex_proc){LEX_CATCH, LEX_TAKE, STD_LEX_RD_MD, TOK_WORD};
 	lex->decision[AND_LEX_RD_MD][END_CHAR] = (t_lex_proc){LEX_DROP, LEX_SKIP, ERR_LEX_RD_MD, TOK_NEW};
-	lex->decision[HEREDOC_LEX_RD_MD][SEP_CHAR] = (t_lex_proc){LEX_CATCH, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
-	lex->decision[HEREDOC_LEX_RD_MD][STD_CHAR] = (t_lex_proc){LEX_CATCH, LEX_TAKE, STD_LEX_RD_MD, TOK_WORD};
-	lex->decision[HEREDOC_LEX_RD_MD][SPL_CHAR] = (t_lex_proc){LEX_CATCH, LEX_SKIP, SPL_LEX_RD_MD, TOK_WORD};
-	lex->decision[HEREDOC_LEX_RD_MD][DBL_CHAR] = (t_lex_proc){LEX_CATCH, LEX_SKIP, DBL_LEX_RD_MD, TOK_WORD};
-	lex->decision[HEREDOC_LEX_RD_MD][ESCP_CHAR] = (t_lex_proc){LEX_KEEP, LEX_SKIP, ESCP_LEX_RD_MD, TOK_NEW};
-	lex->decision[HEREDOC_LEX_RD_MD][PIPE_CHAR] = (t_lex_proc){LEX_DROP, LEX_SKIP, ERR_LEX_RD_MD, TOK_NEW};
-	lex->decision[HEREDOC_LEX_RD_MD][AMP_CHAR] = (t_lex_proc){LEX_DROP, LEX_SKIP, ERR_LEX_RD_MD, TOK_NEW};
-	lex->decision[HEREDOC_LEX_RD_MD][LT_CHAR] = (t_lex_proc){LEX_DROP, LEX_TAKE, ERR_LEX_RD_MD, TOK_NEW};
-	lex->decision[HEREDOC_LEX_RD_MD][GT_CHAR] = (t_lex_proc){LEX_DROP, LEX_TAKE, ERR_LEX_RD_MD, TOK_NEW};
-	lex->decision[HEREDOC_LEX_RD_MD][DOL_CHAR] = (t_lex_proc){LEX_CATCH, LEX_TAKE, STD_LEX_RD_MD, TOK_WORD};
-	lex->decision[HEREDOC_LEX_RD_MD][END_CHAR] = (t_lex_proc){LEX_CATCH, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
+	lex->decision[HDOC_LEX_RD_MD][SEP_CHAR] = (t_lex_proc){LEX_CATCH, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
+	lex->decision[HDOC_LEX_RD_MD][STD_CHAR] = (t_lex_proc){LEX_CATCH, LEX_TAKE, STD_LEX_RD_MD, TOK_WORD};
+	lex->decision[HDOC_LEX_RD_MD][SPL_CHAR] = (t_lex_proc){LEX_CATCH, LEX_SKIP, SPL_LEX_RD_MD, TOK_WORD};
+	lex->decision[HDOC_LEX_RD_MD][DBL_CHAR] = (t_lex_proc){LEX_CATCH, LEX_SKIP, DBL_LEX_RD_MD, TOK_WORD};
+	lex->decision[HDOC_LEX_RD_MD][ESCP_CHAR] = (t_lex_proc){LEX_KEEP, LEX_SKIP, ESCP_LEX_RD_MD, TOK_NEW};
+	lex->decision[HDOC_LEX_RD_MD][PIPE_CHAR] = (t_lex_proc){LEX_DROP, LEX_SKIP, ERR_LEX_RD_MD, TOK_NEW};
+	lex->decision[HDOC_LEX_RD_MD][AMP_CHAR] = (t_lex_proc){LEX_DROP, LEX_SKIP, ERR_LEX_RD_MD, TOK_NEW};
+	lex->decision[HDOC_LEX_RD_MD][LT_CHAR] = (t_lex_proc){LEX_DROP, LEX_TAKE, ERR_LEX_RD_MD, TOK_NEW};
+	lex->decision[HDOC_LEX_RD_MD][GT_CHAR] = (t_lex_proc){LEX_DROP, LEX_TAKE, ERR_LEX_RD_MD, TOK_NEW};
+	lex->decision[HDOC_LEX_RD_MD][DOL_CHAR] = (t_lex_proc){LEX_CATCH, LEX_TAKE, STD_LEX_RD_MD, TOK_WORD};
+	lex->decision[HDOC_LEX_RD_MD][END_CHAR] = (t_lex_proc){LEX_CATCH, LEX_SKIP, NEW_LEX_RD_MD, TOK_NEW};
 	return (0);
 }
 
