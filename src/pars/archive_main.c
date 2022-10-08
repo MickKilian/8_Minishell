@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 18:19:58 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 17:05:10 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 16:01:12 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -34,7 +34,7 @@ int	ft_read_prompt(void)
 	ft_general_initialize(&lex, &pars);
 	//ft_init_token_types(&lex);
 	//temp = readline("$>");
-	fd = open("parser.test", O_RDONLY, 644);
+	fd = open("lexer.test", O_RDONLY, 644);
 	if (fd < 0)
 		return (ft_msgerr(ERR_TESTFILE), 1);
 	lex.user_input = get_next_line(fd);

@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 15:44:03 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 18:19:22 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 15:56:15 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -386,6 +386,8 @@ struct s_redir_proc
 
 struct s_lex
 {
+	t_token		*token;
+	int			nb_of_tokens;
 	char		*temp;
 	int			nb_taken_char;
 	char		*user_input;
@@ -394,22 +396,21 @@ struct s_lex
 	t_lex_proc	decision[LEN_LEX_RD_MDS][LEN_CHAR_TYPES];
 	char		*token_types[LEN_TOKEN_TYPES];
 	t_lex_func	ft[LEN_LEX_ACTIONS];
-	int			nb_of_tokens;
-	t_token		*token;
 };
 
 struct s_pars
 {
 	t_cmd			*cmd;
 	t_cmd			*cmd_head;
-	char			*temp;
-	int				nb_taken_char;
-	int				offset_start;
-	int				start_std;
-	int				start_dol;
-	int				before_dol_mode;
-	int				hdoc_i;
+	t_command		*command;
+	t_token			*token;
+	int				nb_of_commands;
+	int				nb_of_tokens;
+	int				fd_in;
+	int				fd_out;
 	t_hdoc			*hdoc_list;
+	int				hdoc_i;
+	char			*temp;
 	char			*parser_text;
 	t_pars_proc		prev_pars_decision;
 	t_pars_proc		new_pars_decision;
@@ -424,12 +425,11 @@ struct s_pars
 	t_pars_func		ft_pars[LEN_PARS_ACTIONS];
 	t_exp_func		ft_exp[LEN_EXP_ACTIONS];
 	t_redir_func	ft_redir[LEN_REDIR_ACTIONS];
-	t_command		*command;
-	int				nb_of_commands;
-	int				nb_of_tokens;
-	t_token			*token;
-	int				fd_in;
-	int				fd_out;
+	int				nb_taken_char;
+	int				offset_start;
+	int				start_std;
+	int				start_dol;
+	int				before_dol_mode;
 };
 
 struct s_cmd
@@ -456,10 +456,10 @@ struct s_command
 	int				id;
 	int				nb_of_tokens;
 	t_token			*token;
-	t_command		*prev;
-	t_command		*next;
 	int				fd_in;
 	int				fd_out;
+	t_command		*prev;
+	t_command		*next;
 };
 
 struct s_hdoc
@@ -507,6 +507,13 @@ int				ft_print_debug_pars(t_pars *pars);
 int				ft_print_debug_exp(t_pars *pars);
 int				ft_print_debug_redir(t_pars *pars);
 int				ft_print_debug_cmd_content(t_pars *pars);
+
+/* ************************************************************************** */
+/*                               unitary_tests.c                              */
+/* ************************************************************************** */
+//int				main(void);
+//t_cmd			ft_read_prompt(char *user_input);
+//int				ft_unitary_tests(void);
 
 /* ************************************************************************** */
 /*                            redirector_heredoc.c                            */

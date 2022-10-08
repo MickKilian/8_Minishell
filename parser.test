@@ -1,0 +1,8 @@
+'$USER'$USER "$USER"$USER $USER"$USER"
+"$USER     $USER    hello"$USER
+'$USER     $USER    hello'$USER
+$USER "name$USER name" "'name$USER name'" 'name$USER name' '"name$USER name"'
+$USERS "name$USERS name" "'name$USERS name'" 'name$USERS name' '"name$USERS name"'
+$USER$USER
+$USER$USER$USERS$USER
+"$USER$USER$USERS$USER bonjour"
