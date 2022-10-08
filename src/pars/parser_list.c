@@ -6,7 +6,7 @@
 /*   By: mbourgeo <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/20 15:22:22 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/09/30 10:57:41 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 16:08:52 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,22 +61,18 @@ t_command	*ft_command_jumpcurrent(t_command *prev, t_command *next)
 int	ft_free_commandlist(t_command *command)
 {
 	t_command	*temp;
-	t_command	*current;
 
 	if (!command)
 		return (1);
-	current = command;
 	while (1)
 	{
-		temp = current;
-		current = ft_command_jumpcurrent(current->prev, current->next);
+		temp = command;
+		command = ft_command_jumpcurrent(command->prev, command->next);
 		ft_free_tokenlist(temp->token);
 		free(temp);
-		if (current == temp)
+		if (command == temp)
 			break ;
 		temp = NULL;
-		//printf("cu : %p\n", current);
-		//printf("cu>next : %p\n", current->next);
 	}
 	command = NULL;
 	return (0);

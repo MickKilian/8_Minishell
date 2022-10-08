@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 05:31:32 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 15:44:03 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 15:56:15 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -400,26 +400,25 @@ struct s_lex
 
 struct s_pars
 {
-	//
-	char		*temp;
-	int			nb_taken_char;
-	int			offset_start;
-	int			start_std;
-	int			start_dol;
-	int			before_dol_mode;
-	int			hdoc_i;
-	t_hdoc		*hdoc_list;
-	char		*parser_text;
-	//int			nb_of_tokens;
-	//
+	t_cmd			*cmd;
+	t_cmd			*cmd_head;
+	char			*temp;
+	int				nb_taken_char;
+	int				offset_start;
+	int				start_std;
+	int				start_dol;
+	int				before_dol_mode;
+	int				hdoc_i;
+	t_hdoc			*hdoc_list;
+	char			*parser_text;
 	t_pars_proc		prev_pars_decision;
 	t_pars_proc		new_pars_decision;
 	t_pars_proc		pars_decision[LEN_PARS_RD_MDS][LEN_TOKEN_TYPES];
 	t_exp_proc		prev_exp_decision;
 	t_exp_proc		new_exp_decision;
 	t_exp_proc		exp_decision[LEN_EXP_RD_MDS][LEN_CHAR_TYPES];
-	t_redir_proc		prev_redir_decision;
-	t_redir_proc		new_redir_decision;
+	t_redir_proc	prev_redir_decision;
+	t_redir_proc	new_redir_decision;
 	t_redir_proc	redir_decision[LEN_REDIR_RD_MDS][LEN_TOKEN_TYPES];
 	char			*token_types[LEN_TOKEN_TYPES];
 	t_pars_func		ft_pars[LEN_PARS_ACTIONS];
@@ -480,7 +479,7 @@ int				ft_lexer(t_lex *lex);
 int				ft_parser(t_lex *lex, t_pars *pars);
 int				ft_expander(t_pars *pars);
 int				ft_redirector(t_pars *pars);
-int				ft_transformer(t_pars *pars, t_cmd *cmd);
+int				ft_transformer(t_pars *pars);
 int				ft_print_lexer_content(t_lex *lex);
 int				ft_print_parser_content(t_pars *pars);
 int				ft_print_expander_content(t_pars *pars);
@@ -507,6 +506,7 @@ int				ft_print_debug_lex(t_lex *lex);
 int				ft_print_debug_pars(t_pars *pars);
 int				ft_print_debug_exp(t_pars *pars);
 int				ft_print_debug_redir(t_pars *pars);
+int				ft_print_debug_cmd_content(t_pars *pars);
 
 /* ************************************************************************** */
 /*                            redirector_heredoc.c                            */
@@ -728,8 +728,8 @@ int				ft_char_type(char c);
 /* ************************************************************************** */
 t_cmd			*ft_new_cmd(char **token);
 t_cmd			*ft_cmd_addnext(t_cmd *current, t_cmd *next);
-int				ft_free_cmdlist(t_cmd *cmd);
 char			**ft_token_list_to_tab(t_command *command);
-int				ft_free_token(char **token, int len);
+int				ft_free_cmdlist(t_cmd *cmd);
+int				ft_free_tokentab(char **token, int len);
 
 #endif

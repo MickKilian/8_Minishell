@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 04:08:56 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 15:33:04 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,26 @@ int	ft_print_debug_redir(t_pars *pars)
 	printf("token_action : %s\n", ft_getlabel_redir_actions(pars->new_redir_decision.token_action));
 	printf("list_action : %s\n", ft_getlabel_redir_actions(pars->new_redir_decision.redir_list_action));
 	printf("redir_read_mode : %s\n", ft_getlabel_redir_read_modes(pars->new_redir_decision.redir_read_mode));
+	printf("\033[0m\n");
+	return (0);
+}
+
+int	ft_print_debug_cmd_content(t_pars *pars)
+{
+	int	i;
+
+	printf("\033[33;2m");
+	pars->cmd = pars->cmd_head;
+	printf("\nCHECK CMD CONTENT\n");
+	while (pars->cmd)
+	{
+		i = 0;
+		printf("command id : %d\n", pars->cmd->id);
+		while (pars->cmd->token[i++])
+			printf("   token[%d] : <%s>\n", i - 1, pars->cmd->token[i - 1]);
+		pars->cmd = pars->cmd->next;
+	}
+	pars->cmd = pars->cmd_head;
 	printf("\033[0m\n");
 	return (0);
 }

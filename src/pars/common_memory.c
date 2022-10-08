@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 03:50:49 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 15:38:55 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ int	ft_cmdlist_freeall(t_pars *pars)
 	ft_free_hdoclist(pars->hdoc_list);
 	ft_free_commandlist(pars->command);
 	*(&(pars->command)) = NULL;
+	ft_free_cmdlist(pars->cmd);
 	ft_bzero(pars, sizeof(t_pars));
 	ft_init_pars_decisions(pars);
 	ft_init_pars_actions(pars);

@@ -18,8 +18,8 @@ bonjour<hello
 hello
 hello "bonjour'
 'bonjour" hello
-"bonjour" "les" 'tres' 'grands' "enfants" | "comment' allez-vous? | Cela va tres tres bien et vous? | tres bien merci
-"bonjour" "les" 'tres' 'grands' "enfants" | comment allez-vous? | Cela va tres tres bien et vous? | tres bien merci
+"bonjour" "les" 'tres' 'grands' "enfants" | "comment' allez-vous? | ca va tres tres bien et vous? | tres bien merci
+"bonjour" "les" 'tres' 'grands' "enfants" | comment allez-vous? | ca va tres tres bien et vous? | tres bien merci
 Ceci est un test
 bon nous allons recommencer un autre test | oui!!!! super on est contents
 

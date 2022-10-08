@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 06:16:39 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 16:03:28 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 16:01:12 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -39,26 +39,6 @@ t_cmd	*ft_cmd_addnext(t_cmd *current, t_cmd *next)
 	return (next);
 }
 
-int	ft_free_cmdlist(t_cmd *cmd)
-{
-	t_cmd	*temp;
-	t_cmd	*current;
-
-	current = cmd;
-	while (1)
-	{
-		temp = current;
-		current = current->next;
-		ft_free_token(temp->token, cmd->nb_of_tokens);
-		free(temp);
-		if (current == NULL)
-			break ;
-		temp = NULL;
-	}
-	cmd = NULL;
-	return (0);
-}
-
 char	**ft_token_list_to_tab(t_command *command)
 {
 	int		i;
@@ -73,20 +53,40 @@ char	**ft_token_list_to_tab(t_command *command)
 		temp[i - 1] = ft_strndup(command->token->id, 0);
 		command->token = command->token->next;
 	}
-	temp[i] = 0;
+	temp[i - 1] = 0;
 	return (temp);
 }
 
-int	ft_free_token(char **token, int len)
+int	ft_free_cmdlist(t_cmd *cmd)
+{
+	t_cmd	*temp;
+
+	while (1)
+	{
+		temp = cmd;
+		cmd = cmd->next;
+		ft_free_tokentab(temp->token, temp->nb_of_tokens);
+		free(temp);
+		temp = NULL;
+		if (cmd == NULL)
+			break ;
+	}
+	cmd = NULL;
+	return (0);
+}
+
+int	ft_free_tokentab(char **token, int len)
 {
 	int	i;
 
 	i = 0;
 	while (i++ < len)
 	{
-		free(token[i]);
-		token[i] = NULL;
+		free(token[i - 1]);
+		token[i - 1] = NULL;
 	}
+	free(token[i - 1]);
+	token[i - 1] = NULL;
 	free(token);
 	return (0);
 }

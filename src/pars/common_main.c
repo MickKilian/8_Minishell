@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/08 06:41:58 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 15:37:24 by mbourgeo         ###   ########.fr       */
 /*   Updated: 2022/09/30 16:01:12 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -24,7 +24,6 @@ int	ft_read_prompt(void)
 {
 	t_lex		lex;
 	t_pars		pars;
-	t_cmd		cmd;
 	int			fd;
 	char		*temp;
 
@@ -101,11 +100,10 @@ int	ft_read_prompt(void)
 			break ;
 		}
 		ft_print_redirector_content(&pars);
-		ft_transformer(&pars, &cmd);
-		//printf("test : %s\n", (cmd.token)[0]);
-		ft_print_transformer_content(&cmd);
+		ft_transformer(&pars);
+		pars.cmd = pars.cmd_head;
+		ft_print_transformer_content(pars.cmd);
 		ft_cmdlist_freeall(&pars);
-		ft_free_cmdlist(&cmd);
 		//ft_bzero(&(lex.prev_decision), sizeof(t_lex_proc));
 		//ft_bzero(&(lex.new_decision), sizeof(t_lex_proc));
 		lex.user_input = get_next_line(fd);
@@ -299,23 +297,29 @@ int	ft_redirector(t_pars *pars)
 	return (0);
 }
 
-int	ft_transformer(t_pars *pars, t_cmd *cmd)
+int	ft_transformer(t_pars *pars)
 {
-	int	i;
+	int		i;
 
 	i = 0;
 	while (i++ < pars->nb_of_commands)
 	{
-		cmd = ft_cmd_addnext(cmd, ft_new_cmd(ft_token_list_to_tab(pars->command)));
-		cmd->id = pars->command->id;
-		printf("test %d\n", cmd->id);
-		printf("test %d\n", cmd->prev->id);
-		cmd->nb_of_tokens = pars->command->nb_of_tokens;
-		cmd->fd_in = pars->command->fd_in;
-		cmd->fd_out = pars->command->fd_out;
+		pars->cmd = ft_cmd_addnext(pars->cmd, ft_new_cmd(ft_token_list_to_tab(pars->command)));
+		if (i == 1)
+			pars->cmd_head = pars->cmd;
+		pars->cmd->id = pars->command->id;
+//		printf("test %d\n", cmd->id);
+//		j = 0;
+//		while (cmd->token[j++])
+//			printf("   +++content[%d] : <%s>\n", j - 1, cmd->token[j - 1]);
+//		if (!cmd->token[--j])
+//			printf("I got out at i : %d\n", j);
+		pars->cmd->nb_of_tokens = pars->command->nb_of_tokens;
+		pars->cmd->fd_in = pars->command->fd_in;
+		pars->cmd->fd_out = pars->command->fd_out;
 		pars->command = pars->command->next;
 	}
-	cmd = cmd->prev->prev;
+	pars->cmd = pars->cmd_head;
 	return (0);
 }
 
@@ -443,10 +447,11 @@ int	ft_print_transformer_content(t_cmd *cmd)
 				cmd->fd_in, cmd->fd_out);
 		while (i++ < cmd->nb_of_tokens)
 		{
-			printf("\033[0;31m%s\033[0m\n", cmd->token[i]);
+			printf("\033[0;31m%s\033[0m\n", cmd->token[i - 1]);
 		}
 		//printf("just stopped on token : %s\n", pars->command->token->id);
 		cmd = cmd->next;
+		i = 0;
 	}
 	printf("\033[0m");
 	printf("\n");
