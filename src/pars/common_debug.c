@@ -6,7 +6,7 @@
 /*   By: mbourgeo <mbourgeo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/16 00:47:14 by mbourgeo          #+#    #+#             */
-/*   Updated: 2022/10/07 23:31:21 by mbourgeo         ###   ########.fr       */
+/*   Updated: 2022/10/08 04:08:56 by mbourgeo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	ft_print_debug_exp(t_pars *pars)
 int	ft_print_debug_redir(t_pars *pars)
 {
 	printf("\033[33;2m");
-	printf("\ndebug/DERIRECTOR\n");
+	printf("\ndebug/REDIRECTOR\n");
 	if (pars->new_redir_decision.token_action == REDIR_ERR)
 		printf("\033[31;2m\n<- ERROR in REDIRECTOR -> \n\033[0m");
 	printf("\033[33;2m");
